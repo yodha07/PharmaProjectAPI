@@ -1,0 +1,39 @@
+cat <<EOL > .gitignore
+# Build Folders
+bin/
+obj/
+build/
+logs/
+artifacts/
+
+# User files
+*.user
+*.suo
+*.userosscache
+
+# Rider / VS Code
+.idea/
+.vscode/
+
+# ASP.NET Core
+appsettings.*.json
+!appsettings.json
+secrets.json
+publish/
+
+# EF Core
+Migrations/*Snapshot.cs
+
+# Node
+node_modules/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+EOL
+
+# Visual Studio folder
+.vs/

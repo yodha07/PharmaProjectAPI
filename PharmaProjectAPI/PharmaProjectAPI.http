@@ -1,0 +1,6 @@
+@PharmaProjectAPI_HostAddress = http://localhost:5259
+
+GET {{PharmaProjectAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
