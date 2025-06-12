@@ -1,5 +1,7 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using PharmaProjectAPI.Data;
+using PharmaProjectAPI.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +13,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("conn")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("dbconn")));
+builder.Services.AddAutoMapper(typeof(MappingData));
 
 var app = builder.Build();
 

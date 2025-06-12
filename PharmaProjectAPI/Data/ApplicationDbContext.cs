@@ -5,11 +5,64 @@ namespace PharmaProjectAPI.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions options) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options)
         {
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Medicine> Medicines { get; set; }
+        public DbSet<Supplier> Suppliers { get; set; }
+        public DbSet<Purchase> Purchases { get; set; }
+        public DbSet<PurchaseItem> PurchaseItems { get; set; }
+        public DbSet<Sale> Sales { get; set; }
+        public DbSet<SaleItem> SaleItems { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Expense> Expenses { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // Purchase - Supplier
+            modelBuilder.Entity<Purchase>()
+                .HasOne(p => p.Supplier)
+                .WithMany(s => s.Purchases)
+                .HasForeignKey(p => p.SupplierId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // PurchaseItem - Purchase
+            modelBuilder.Entity<PurchaseItem>()
+                .HasOne(p => p.Purchase)
+                .WithMany(p => p.PurchaseItems)
+                .HasForeignKey(p => p.PurchaseId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // PurchaseItem - Medicine
+            modelBuilder.Entity<PurchaseItem>()
+                .HasOne(p => p.Medicine)
+                .WithMany(m => m.PurchaseItems)
+                .HasForeignKey(p => p.MedicineId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // SaleItem - Sale
+            modelBuilder.Entity<SaleItem>()
+                .HasOne(s => s.Sale)
+                .WithMany(s => s.SaleItems)
+                .HasForeignKey(s => s.SaleId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // SaleItem - Medicine
+            modelBuilder.Entity<SaleItem>()
+                .HasOne(s => s.Medicine)
+                .WithMany(m => m.SaleItems)
+                .HasForeignKey(s => s.MedicineId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Sale - Customer
+            modelBuilder.Entity<Sale>()
+                .HasOne(s => s.Customer)
+                .WithMany(c => c.Sales)
+                .HasForeignKey(s => s.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
     }
 }

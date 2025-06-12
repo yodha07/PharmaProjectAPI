@@ -6,10 +6,14 @@ namespace PharmaProjectAPI.Models
     {
         [Key]
         public int UserId { get; set; }
-        public string Username { get; set; } = null!;
-        public string Email { get; set; } = null!;
-        public string PasswordHash { get; set; } = null!;
-        public string Role { get; set; } = "Cashier";
+        [Required]
+        public string Username { get; set; }
+        [Required]
+        public string Email { get; set; } 
+        [Required]
+        public string PasswordHash { get; set; }
+        [Required]
+        public string Role { get; set; } // Admin, Pharmacist, Cashier
         public DateTime CreatedDate { get; set; } = DateTime.Now;
     }
 }
