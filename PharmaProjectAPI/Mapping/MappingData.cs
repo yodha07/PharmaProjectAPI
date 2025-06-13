@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using PharmaProjectAPI.DTO;
+using PharmaProjectAPI.Models;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PharmaProjectAPI.Mapping
@@ -7,6 +9,10 @@ namespace PharmaProjectAPI.Mapping
     {
         public MappingData()
         {
+            CreateMap<Register, User>()
+                .ForMember(dest => dest.UserId, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src => DateTime.Now))
+                .ForMember(dest => dest.Role, opt => opt.Ignore());
         }
     }
 }

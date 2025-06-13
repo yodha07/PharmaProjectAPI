@@ -2,6 +2,8 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using PharmaProjectAPI.Data;
 using PharmaProjectAPI.Mapping;
+using PharmaProjectAPI.Repository;
+using PharmaProjectAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IUserRepo, UserService>();
+
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("dbconn")));
