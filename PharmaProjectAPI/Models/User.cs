@@ -13,7 +13,7 @@ namespace PharmaProjectAPI.Models
         [Required]
         public string PasswordHash { get; set; }
         [Required]
-        public string Role { get; set; } // Admin, Pharmacist, Cashier
+        public string Role { get; set; } // Admin, Pharmacist, Cashier, User
         public DateTime CreatedDate { get; set; } = DateTime.Now;
     }
 }
