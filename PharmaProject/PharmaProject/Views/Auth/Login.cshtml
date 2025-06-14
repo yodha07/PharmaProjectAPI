@@ -1,14 +1,16 @@
-﻿@model PharmaProject.Models.RegisterDTO
+﻿@model PharmaProject.Models.LoginDTO
 
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Login";
 }
 
-<h1>Register</h1>
+<h1>Login</h1>
+
+<h4>LoginDTO</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Register">
+        <form asp-action="Login">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Username" class="control-label"></label>
@@ -16,21 +18,11 @@
                 <span asp-validation-for="Username" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="PasswordHash" class="control-label"></label>
-                <input asp-for="PasswordHash" class="form-control" />
+                <input type="password" asp-for="PasswordHash" class="form-control" />
                 <span asp-validation-for="PasswordHash" class="text-danger"></span>
             </div>
-            @* <div class="form-group"> *@
-            @*     <label asp-for="Role" class="control-label"></label> *@
-            @*     <input asp-for="Role" class="form-control" /> *@
-            @*     <span asp-validation-for="Role" class="text-danger"></span> *@
-            @* </div> *@
-            <div class="form-group my-3 py-3">
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>

@@ -60,5 +60,28 @@ namespace PharmaProject.Controllers
             return View();
         }
 
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginDTO login)
+        {
+            if (ModelState.IsValid)
+            {
+                string url = "https://localhost:7078/api/Auth/Login";
+                string json = JsonConvert.SerializeObject(login);
+
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await client.PostAsync(url, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("Index");
+                }
+            }
+            return View(login);
+        }
+
     }
 }
