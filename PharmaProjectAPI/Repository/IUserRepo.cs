@@ -9,5 +9,6 @@ namespace PharmaProjectAPI.Repository
         Task Register(User user);
         bool UserExists(Register reg);
         Task<string> Login(Login login);
+        List<UsersDTO> GetUser();
     }
 }
