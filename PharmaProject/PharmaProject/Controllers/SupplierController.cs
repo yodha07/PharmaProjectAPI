@@ -51,22 +51,22 @@ namespace PharmaProject.Controllers
             HttpResponseMessage response = client.PostAsync(url, content).Result;
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToAction("Index");
+                return Json("");
             }
-            return View();
+            return Json("");
 
         }
 
         public IActionResult EditSupplier(int id)
         {
-            SupplierDTO1 data = new SupplierDTO1();
+            SupplierDTO3 data = new SupplierDTO3();
             string url = "https://localhost:7078/api/Supplier/GetSup/";
 
             HttpResponseMessage response = client.GetAsync(url + id).Result;
             if (response.IsSuccessStatusCode)
             {
                 var json = response.Content.ReadAsStringAsync().Result;
-                var obj = JsonConvert.DeserializeObject<SupplierDTO1>(json);
+                var obj = JsonConvert.DeserializeObject<SupplierDTO3>(json);
                 if (obj != null)
                 {
                     data = obj;
@@ -76,7 +76,7 @@ namespace PharmaProject.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditSupplier(SupplierDTO1 em)
+        public IActionResult EditSupplier(SupplierDTO3 em)
         {
             em.ModifiedBy = "Admin";
             string url = "https://localhost:7078/api/Supplier/UpdateSup/";
@@ -95,7 +95,7 @@ namespace PharmaProject.Controllers
 
         public IActionResult DeleteSupplier(int id)
         {
-            string url = "https://localhost:7078/api/Supplier/DeleteSup/{id}";
+            string url = $"https://localhost:7078/api/Supplier/DeleteSup/{id}";
             HttpResponseMessage response = client.DeleteAsync(url).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -103,7 +103,7 @@ namespace PharmaProject.Controllers
             }
             else
             {
-                return View();
+                return RedirectToAction("Index");
             }
         }
     }

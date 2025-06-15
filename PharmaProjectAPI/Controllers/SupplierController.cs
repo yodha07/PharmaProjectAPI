@@ -41,7 +41,7 @@ namespace PharmaProjectAPI.Controllers
 
         [HttpPut]
         [Route("UpdateSup")]
-        public IActionResult UpdateSupplier(SupplierDTO dto)
+        public IActionResult UpdateSupplier(SupplierDTO3 dto)
         {
             repo.UpdateSupplier(dto);
             return Ok("Updated Successfully");

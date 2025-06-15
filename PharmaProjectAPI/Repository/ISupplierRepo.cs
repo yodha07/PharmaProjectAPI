@@ -6,8 +6,8 @@ namespace PharmaProjectAPI.Repository
     {
         void AddSupplier(SupplierDTO supplier);
         List<SupplierDTO2> GetAll();
-        SupplierDTO GetSupplierById(int id);
-        void UpdateSupplier(SupplierDTO supplier);
+        SupplierDTO3 GetSupplierById(int id);
+        void UpdateSupplier(SupplierDTO3 supplier);
 
         void DeleteSupplier(int id);
     }

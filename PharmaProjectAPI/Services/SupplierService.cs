@@ -23,8 +23,6 @@ namespace PharmaProjectAPI.Services
             var data = mapper.Map<Supplier>(supplier);
 
             data.CreatedAt = DateTime.Now;
-            data.ModifiedAt = DateTime.Now;
-            data.ModifiedBy = supplier.CreatedBy;
 
             db.Suppliers.Add(data);
             db.SaveChanges();
@@ -35,13 +33,13 @@ namespace PharmaProjectAPI.Services
             var supplier = mapper.Map<List<SupplierDTO2>>(data);
             return supplier;
         }
-        public SupplierDTO GetSupplierById(int id)
+        public SupplierDTO3 GetSupplierById(int id)
         {
             var data = db.Suppliers.Find(id);
-            var supplier=mapper.Map<SupplierDTO>(data);
+            var supplier=mapper.Map<SupplierDTO3>(data);
             return supplier;
         }
-        public void UpdateSupplier(SupplierDTO supplier) 
+        public void UpdateSupplier(SupplierDTO3 supplier) 
         {
             var existing = db.Suppliers.FirstOrDefault(x => x.SupplierId == supplier.SupplierId);
             if (existing != null)

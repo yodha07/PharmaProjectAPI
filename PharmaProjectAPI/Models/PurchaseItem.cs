@@ -14,7 +14,7 @@ namespace PharmaProjectAPI.Models
         public DateTime CreatedAt { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? ModifiedAt { get; set; }
-        public string ModifiedBy { get; set; }
+        public string? ModifiedBy { get; set; }
 
         [ForeignKey("PurchaseId")]
         public Purchase Purchase { get; set; }
