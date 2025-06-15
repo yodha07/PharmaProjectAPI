@@ -24,6 +24,7 @@ namespace PharmaProjectAPI.Services
 
             data.CreatedAt = DateTime.Now;
             data.ModifiedAt = DateTime.Now;
+            data.ModifiedBy = supplier.CreatedBy;
 
             db.Suppliers.Add(data);
             db.SaveChanges();
