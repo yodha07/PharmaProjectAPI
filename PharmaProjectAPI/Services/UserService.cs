@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 using PharmaProjectAPI.Data;
 using PharmaProjectAPI.DTO;
 using PharmaProjectAPI.Models;
@@ -44,6 +45,15 @@ namespace PharmaProjectAPI.Services
                 return "Invalid password";
 
             return "Login successful";
+        }
+
+        public List<UsersDTO> GetUser()
+        {
+            var userList = db.Users.ToList();
+
+            var data = mapper.Map<List<UsersDTO>>(userList);
+
+            return data;
         }
     }
 }

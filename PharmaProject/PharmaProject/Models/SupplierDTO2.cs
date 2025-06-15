@@ -1,10 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace PharmaProjectAPI.Models
+﻿namespace PharmaProject.Models
 {
-    public class Supplier
+    public class SupplierDTO2
     {
-        [Key]
         public int SupplierId { get; set; }
         public string Name { get; set; }
         public string Contact { get; set; }
@@ -12,9 +9,7 @@ namespace PharmaProjectAPI.Models
 
         public DateTime CreatedAt { get; set; }
         public string CreatedBy { get; set; }
-        public DateTime? ModifiedAt { get; set; }
-        public string? ModifiedBy { get; set; }
-
-        public List<Purchase> Purchases { get; set; }
+        public DateTime ModifiedAt { get; set; }
+        public string ModifiedBy { get; set; }
     }
 }

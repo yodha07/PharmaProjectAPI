@@ -27,7 +27,7 @@ namespace PharmaProjectAPI.Controllers
         }
 
         [HttpPost]
-        [Route ("Register")]
+        [Route("Register")]
         public async Task<IActionResult> Register(Register reg)
         {
             var res = repo.UserExists(reg);
@@ -38,7 +38,7 @@ namespace PharmaProjectAPI.Controllers
 
             string pass = BCrypt.Net.BCrypt.HashPassword(reg.PasswordHash);
             var user = mapper.Map<User>(reg);
-            user.Role = "Cashier"; 
+            user.Role = "Cashier";
             user.PasswordHash = pass;
             user.CreatedDate = DateTime.Now;
 
@@ -48,7 +48,7 @@ namespace PharmaProjectAPI.Controllers
 
         [HttpPost]
         [Route("Login")]
-        public async Task<IActionResult> Login (Login login)
+        public async Task<IActionResult> Login(Login login)
         {
             var res = await repo.Login(login);
             if (res != "Login successful")
@@ -56,6 +56,18 @@ namespace PharmaProjectAPI.Controllers
                 return BadRequest(res);
             }
             return Ok("Login successful");
+        }
+
+        [HttpGet]
+        [Route("GetUser")]
+        public IActionResult GetUser()
+        {
+            var userList = repo.GetUser();
+            if (userList.Count == 0)
+            {
+                return NotFound("No user found with the provided username or email");
+            }
+            return Ok(userList);
         }
     }
 }

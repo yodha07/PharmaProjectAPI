@@ -13,6 +13,12 @@ namespace PharmaProjectAPI.Mapping
                 .ForMember(dest => dest.UserId, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src => DateTime.Now))
                 .ForMember(dest => dest.Role, opt => opt.Ignore());
+
+            CreateMap<User, UsersDTO>().ReverseMap();
+
+            CreateMap<Supplier, SupplierDTO>().ReverseMap();
+            CreateMap<Supplier, SupplierDTO2>().ReverseMap();
+            CreateMap<Supplier, SupplierDTO3>().ReverseMap();
         }
     }
 }
