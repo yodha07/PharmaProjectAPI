@@ -15,6 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUserRepo, UserService>();
+builder.Services.AddScoped<ICustomerRepo, CustomerService>();
 
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
