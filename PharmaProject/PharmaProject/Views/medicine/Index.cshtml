@@ -1,0 +1,48 @@
+﻿@model List<MedicineM>
+
+<table class="table" border="1">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Category</th>
+            <th scope="col">Manufacturer</th>
+            <th scope="col">Price Per Unit</th>
+            <th scope="col">Batch No</th>
+            <th scope="col">Expiry Date</th>
+            <th scope="col">Creataed At</th>
+            <th scope="col">Modified At</th>
+            <th scope="col">Modified By</th>
+            <th scope="col">Purchase Items</th>
+            <th scope="col">Sale Items</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var i in Model)
+        {
+            <tr>
+                <th scope="row">@i.name</th>
+                <td>@i.category</td>
+                <td>@i.manufacturer</td>
+                <td>@i.pricePerUnit</td>
+                <td>@i.batchNo</td>
+                <td>@i.expiryDate</td>
+                <td>@i.createdAt</td>
+                <td>@i.createdBy</td>
+                <td>@i.modifiedAt</td>
+                <td>@i.modifiedBy</td>
+                <td>@i.purchaseItems</td>
+                <td>@i.saleItems</td>
+                <td>
+                    <a asp-action="Delete" asp-route-id="@i.medicineId" class="btn btn-danger"  >Delete</a>
+                    <a asp-action="Edit" asp-route-id="@i.medicineId" class="btn btn-success">Edit</a>
+
+                </td>
+            </tr>
+        }
+       
+    
+    </tbody>
+</table>
+
+                <a asp-action="Add" class="btn btn-primary" >Add Medicine</a>

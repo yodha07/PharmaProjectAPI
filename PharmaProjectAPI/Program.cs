@@ -21,6 +21,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("dbconn")));
 builder.Services.AddAutoMapper(typeof(MappingData));
 
+builder.Services.AddScoped<IMedicine, MedicineService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
