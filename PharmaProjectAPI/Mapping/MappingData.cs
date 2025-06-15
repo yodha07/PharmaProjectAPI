@@ -15,6 +15,9 @@ namespace PharmaProjectAPI.Mapping
                 .ForMember(dest => dest.Role, opt => opt.Ignore());
 
             CreateMap<User, UsersDTO>().ReverseMap();
+
+            CreateMap<Supplier, SupplierDTO>().ReverseMap();
+            CreateMap<Supplier, SupplierDTO2>().ReverseMap();
         }
     }
 }
