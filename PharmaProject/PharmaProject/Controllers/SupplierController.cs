@@ -19,6 +19,10 @@ namespace PharmaProject.Controllers
         }
         public IActionResult Index()
         {
+            return View();
+        }
+        public IActionResult GetAllSupplier()
+        {
             List<SupplierDTO2> data = new List<SupplierDTO2>();
             string url = "https://localhost:7078/api/Supplier/FetchSup/";
 
@@ -33,7 +37,7 @@ namespace PharmaProject.Controllers
                 }
             }
 
-            return View(data);
+            return Json(data);
         }
 
         public IActionResult AddSupplier()
@@ -51,13 +55,15 @@ namespace PharmaProject.Controllers
             HttpResponseMessage response = client.PostAsync(url, content).Result;
             if (response.IsSuccessStatusCode)
             {
-                return Json("");
+                return Json(new { success = true });
             }
-            return Json("");
-
+            else
+            {
+                return Json(new { success = false });
+            }
         }
 
-        public IActionResult EditSupplier(int id)
+        public IActionResult GetSupplierById(int id)
         {
             SupplierDTO3 data = new SupplierDTO3();
             string url = "https://localhost:7078/api/Supplier/GetSup/";
@@ -72,7 +78,7 @@ namespace PharmaProject.Controllers
                     data = obj;
                 }
             }
-            return View(data);
+            return Json(data);
         }
 
         [HttpPost]
@@ -85,11 +91,11 @@ namespace PharmaProject.Controllers
             HttpResponseMessage response = client.PutAsync(url, content).Result;
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToAction("Index");
+                return Json(new { success = true });
             }
             else
             {
-                return View();
+                return Json(new { success = false });
             }
         }
 
@@ -99,11 +105,11 @@ namespace PharmaProject.Controllers
             HttpResponseMessage response = client.DeleteAsync(url).Result;
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToAction("Index");
+                return Json(new { success = true });
             }
             else
             {
-                return RedirectToAction("Index");
+                return Json(new { success = false });
             }
         }
     }

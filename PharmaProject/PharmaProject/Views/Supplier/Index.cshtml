@@ -1,76 +1,60 @@
-﻿@model IEnumerable<PharmaProject.Models.SupplierDTO2>
-
-@{
+﻿@{
     ViewData["Title"] = "Index";
 }
 
 <h1>Suppliers List</h1>
 
-<p>
-    <a asp-action="AddSupplier" class="btn btn-primary">Add Supplier</a>
-</p>
-<table class="table">
+<div>
+    <input type="button" value="Add Supplier" id="suppModal" class="btn btn-primary">
+    <input type="text" placeholder="Search..." id="stxt" class="form-control" />
+</div>
+<br />
+<table class="table table-bordered">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.SupplierId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Contact)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ModifiedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ModifiedBy)
-            </th>
-            <th></th>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Contact</th>
+            <th>Address</th>
+            <th>CreatedAt</th>
+            <th>CreatedBy</th>
+            <th>ModifiedAt</th>
+            <th>ModifiedBy</th>
+            <th>Action</th>
         </tr>
     </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.SupplierId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Contact)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedBy)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ModifiedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ModifiedBy)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "EditSupplier", new { id=item.SupplierId/* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "DeleteSupplier", new { id = item.SupplierId/* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
+    <tbody id="supTable">
     </tbody>
 </table>
+
+<!-- Modal -->
+<div class="modal fade" id="exModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="SuppForm">
+                    <div>
+                        <input type="hidden" name="SupplierId" id="SupplierId" />
+                    </div>
+                    Name <input type="text" name="Name" id="Name" class="form-control" />
+                    Contact <input type="text" name="Contact" id="Contact" class="form-control" />
+                    Address <input type="text" name="Address" id="Address" class="form-control" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="savebtn">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/js/supplier.js"></script>
+
+}
