@@ -10,5 +10,6 @@ namespace PharmaProjectAPI.Repository
         bool UserExists(Register reg);
         Task<string> Login(Login login);
         List<UsersDTO> GetUser();
+        Task <bool> SendEmailAsync(string toemail, string subject, string body);
     }
 }

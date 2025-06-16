@@ -2,10 +2,13 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
+using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
 using PharmaProjectAPI.Data;
 using PharmaProjectAPI.DTO;
 using PharmaProjectAPI.Models;
 using PharmaProjectAPI.Repository;
+using System.Net;
+using System.Net.Mail;
 
 namespace PharmaProjectAPI.Services
 {
@@ -14,6 +17,8 @@ namespace PharmaProjectAPI.Services
         private readonly ApplicationDbContext db;
 
         private readonly IMapper mapper;
+
+        private readonly MailSettings mail;
 
         public UserService(ApplicationDbContext db, IMapper mapper)
         {
@@ -54,6 +59,33 @@ namespace PharmaProjectAPI.Services
             var data = mapper.Map<List<UsersDTO>>(userList);
 
             return data;
+        }
+
+        public async Task<bool> SendEmailAsync(string toEmail, string subject, string body)
+        {
+            try
+            {
+                var smtpClient = new SmtpClient(mail.Host, mail.Port)
+                {
+                    Credentials = new NetworkCredential(mail.UserName, mail.Password),
+                    EnableSsl = mail.UseSSL
+                };
+
+                var mailMessage = new MailMessage();
+                mailMessage.From = new MailAddress(mail.EmailId, mail.DisplayName);
+                mailMessage.To.Add(toEmail);
+                mailMessage.Subject = subject;
+                mailMessage.Body = body;
+                mailMessage.IsBodyHtml = true;
+
+                await smtpClient.SendMailAsync(mailMessage);
+                return true;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"Error sending email: {ex.Message}");
+                return false;
+            }
         }
     }
 }

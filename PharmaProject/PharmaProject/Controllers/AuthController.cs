@@ -4,15 +4,18 @@ using PharmaProject.Models;
 using static System.Net.WebRequestMethods;
 using System.Text;
 using System.Text.Unicode;
+using PharmaProject.Data;
 
 namespace PharmaProject.Controllers
 {
     public class AuthController : Controller
     {
         HttpClient client;
+        private readonly ApplicationDbContext db;
 
-        public AuthController()
+        public AuthController(ApplicationDbContext db)
         {
+            this.db = db;
             HttpClientHandler clientHandler = new HttpClientHandler();
             clientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, error) => true;
             client = new HttpClient(clientHandler);
@@ -77,10 +80,18 @@ namespace PharmaProject.Controllers
                 HttpResponseMessage response = await client.PostAsync(url, content);
                 if (response.IsSuccessStatusCode)
                 {
+
                     return RedirectToAction("Index");
                 }
             }
             return View(login);
+        }
+
+        [HttpGet]
+        public JsonResult CheckUsername(string username)
+        {
+            bool exists = db.Users.Any(u => u.Username == username);
+            return Json(!exists);
         }
 
     }

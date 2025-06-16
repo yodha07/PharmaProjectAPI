@@ -43,6 +43,10 @@ namespace PharmaProjectAPI.Controllers
             user.CreatedDate = DateTime.Now;
 
             await repo.Register(user);
+
+            await repo.SendEmailAsync(reg.Email, "Registration Succesful", "Welcome to Pharma Suite\n" +
+                "Hope you find all your pharmacetucal needs!\n" +
+                "Thank You for your support!!");
             return Ok("Registration successful");
         }
 
