@@ -1,0 +1,30 @@
+﻿@model List<MedicineM>
+
+<div class="container mt-4">
+    <div class="row">
+
+@foreach(var i in Model)
+{
+      <div class="col-md-3 mb-4">
+                <div class="card h-100 shadow">
+                    <div class="card-body">
+
+    <div class="card" style="width: 18rem;">
+       
+            <div class="card-body">
+                <h5 class="card-title">@i.name</h5>
+                <h6 class="card-subtitle mb-2 text-muted">@i.pricePerUnit Rupees</h6>
+                <p class="card-text">@i.category</p>
+                <a href="#" class="card-link">Buy</a>
+                <a href="#" class="card-link">Add To cart</a>
+            </div>
+      
+       
+    </div>
+    </div>
+    </div>  
+    </div>
+}
+</<div>
+
+</div>
