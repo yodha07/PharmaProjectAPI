@@ -13,16 +13,13 @@ namespace PharmaProjectAPI.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly ApplicationDbContext db;
-
         private readonly IMapper mapper;
 
         private readonly IUserRepo repo;
 
-        public AuthController(ApplicationDbContext db, IMapper mapper, IUserRepo repo)
+        public AuthController(IMapper mapper, IUserRepo repo)
         {
             this.mapper = mapper;
-            this.db = db;
             this.repo = repo;
         }
 
