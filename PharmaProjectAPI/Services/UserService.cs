@@ -28,8 +28,8 @@ namespace PharmaProjectAPI.Services
 
         public async Task Register(User user)
         {
-            db.Users.Add(user);
-            db.SaveChangesAsync();
+            await db.Users.AddAsync(user);
+            await db.SaveChangesAsync();
         }
 
         public bool UserExists(Register reg)
