@@ -20,6 +20,7 @@ builder.Services.AddScoped<ICustomerRepo, CustomerService>();
 
 builder.Services.AddScoped<ISupplierRepo, SupplierService>();
 
+builder.Services.AddScoped<IDashboard, DashboardService>();
 
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

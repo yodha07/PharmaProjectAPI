@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace EstateFin.Filters
+namespace PharmaProject.Filters
 {
     public class GlobalException : ExceptionFilterAttribute
     {

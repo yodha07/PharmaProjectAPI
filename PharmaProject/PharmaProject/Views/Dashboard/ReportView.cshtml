@@ -1,0 +1,219 @@
+﻿@model Dashboard
+
+@{
+    ViewData["Title"] = "Pharmacy Dashboard";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-primary">📊 Pharmacy Dashboard</h2>
+
+    <div class="row">
+        <!-- Total Medicines -->
+        <div class="col-md-3">
+            <div class="card bg-info text-white shadow mb-4">
+                <div class="card-body">
+                    <h5>Total Medicines</h5>
+                    <h3>@Model.TotalMedicines</h3>
+                    <p class="mb-0">In inventory</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Sales -->
+        <div class="col-md-3">
+            <div class="card bg-success text-white shadow mb-4">
+                <div class="card-body">
+                    <h5>Total Sales</h5>
+                    <h3>₹ @Model.TotalSales.ToString("N2")</h3>
+                    <p class="mb-0">All-time revenue</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Expiring Soon -->
+        <div class="col-md-3">
+            <div class="card bg-warning text-white shadow mb-4">
+                <div class="card-body">
+                    <h5>Expiring Soon</h5>
+                    <h3>@Model.ExpiringSoon</h3>
+                    <p class="mb-0">Within 30 days</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Low Stock -->
+        <div class="col-md-3">
+            <div class="card bg-danger text-white shadow mb-4">
+                <div class="card-body">
+                    <h5>Low Stock</h5>
+                    <h3>@Model.LowStock</h3>
+                    <p class="mb-0">Below safety level</p>
+                </div>
+            </div>
+        </div>
+
+<div class="container mt-4">
+    <h2 class="text-primary mb-4">📋 Reports Dashboard</h2>
+
+    <!-- ✅ 1. Today’s Sales -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-dark text-white">
+            Today’s Sales (Last 10 Transactions)
+        </div>
+        <div class="card-body">
+            @if (Model.TodaySales.Any())
+            {
+                <table class="table table-bordered table-hover table-sm">
+                    <thead class="table-secondary">
+                        <tr>
+                            <th>Sale ID</th>
+                            <th>Customer</th>
+                            <th>Date</th>
+                            <th>Total (₹)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var sale in Model.TodaySales)
+                        {
+                            <tr>
+                                <td>@sale.SaleId</td>
+                                <td>@sale.CustomerName</td>
+                                <td>@sale.SaleDate.ToString("dd MMM yyyy")</td>
+                                <td>@sale.TotalAmount.ToString("N2")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="text-muted">No sales recorded today.</p>
+            }
+        </div>
+    </div>
+
+    <!-- ✅ 2. Expired Medicines -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-danger text-white">
+            Expired Medicines
+        </div>
+        <div class="card-body">
+            @if (Model.ExpiredMedicines.Any())
+            {
+                <table class="table table-bordered table-hover table-sm">
+                    <thead class="table-danger">
+                        <tr>
+                            <th>Medicine Name</th>
+                            <th>Expiry Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var med in Model.ExpiredMedicines)
+                        {
+                            <tr>
+                                <td>@med.Name</td>
+                                <td>@med.ExpiryDate.ToString("dd MMM yyyy")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="text-muted">No expired medicines.</p>
+            }
+        </div>
+    </div>
+
+    <!-- ✅ 3. Stock Summary -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-primary text-white">
+            Stock Summary
+        </div>
+        <div class="card-body">
+            @if (Model.StockSummaries.Any())
+            {
+                <table class="table table-bordered table-hover table-sm">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Medicine Name</th>
+                            <th>Category</th>
+                            <th>Available Stock</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var stock in Model.StockSummaries)
+                        {
+                            <tr>
+                                <td>@stock.Name</td>
+                                <td>@stock.Category</td>
+                                <td>@stock.Stock</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="text-muted">Stock information not available.</p>
+            }
+        </div>
+    </div>
+</div>
+
+
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        const monthlyLabels = [
+        @string.Join(",", Model.MonthlySales.Select(x => $"\"{x.Month:D2}/{x.Year}\""))
+        ];
+        const monthlyValues = [
+        @string.Join(",", Model.MonthlySales.Select(x => x.TotalAmount.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)))
+        ];
+
+        const ctx = document.getElementById('monthlySalesChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: monthlyLabels,
+                datasets: [{
+                    label: 'Total Sales (₹)',
+                    data: monthlyValues,
+                    fill: true,
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    tension: 0.4, // <-- gives the wave/smooth look
+                    pointRadius: 5,
+                    pointBackgroundColor: 'rgba(54, 162, 235, 1)'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: false,
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '₹' + value;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+}
