@@ -51,8 +51,15 @@ namespace PharmaProjectAPI.Controllers
         [Route("DeleteSup/{id}")]
         public IActionResult DeleteSupplier(int id)
         {
-            repo.DeleteSupplier(id);
-            return Ok("Deleted Successfully");
+            int r=repo.DeleteSupplier(id);
+            if (r > 0)
+            {
+                return Ok("Deleted Successfully");
+            }
+            else
+            {
+                return NotFound("Cannot delete this record");
+            }
         }
     }
 }

@@ -9,6 +9,6 @@ namespace PharmaProjectAPI.Repository
         SupplierDTO3 GetSupplierById(int id);
         void UpdateSupplier(SupplierDTO3 supplier);
 
-        void DeleteSupplier(int id);
+        int DeleteSupplier(int id);
     }
 }

@@ -19,7 +19,7 @@ builder.Services.AddScoped<IUserRepo, UserService>();
 builder.Services.AddScoped<ICustomerRepo, CustomerService>();
 
 builder.Services.AddScoped<ISupplierRepo, SupplierService>();
-
+builder.Services.AddScoped<IPurchaseRepo, PurchaseService>();
 
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
