@@ -3,6 +3,7 @@ using MySqlX.XDevAPI;
 using Newtonsoft.Json;
 using PharmaProjectAPI.DTO;
 using PharmaProject.Filters;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PharmaProject.Controllers
 {
@@ -18,6 +19,7 @@ namespace PharmaProject.Controllers
             client.BaseAddress = new Uri("https://localhost:7078/api/Dashboard/");
         }
 
+        [Authorize(Roles = "Admin,Pharmacist")]
         public async Task<IActionResult> Index()
         {
             var model = new Models.Dashboard();

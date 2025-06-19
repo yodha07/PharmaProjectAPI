@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +8,7 @@ using PharmaProjectAPI.Data;
 using PharmaProjectAPI.DTO;
 using PharmaProjectAPI.Models;
 using PharmaProjectAPI.Repository;
+using System.Security.Claims;
 
 namespace PharmaProjectAPI.Controllers
 {
@@ -56,6 +59,14 @@ namespace PharmaProjectAPI.Controllers
             {
                 return BadRequest(res);
             }
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, login.Username),
+                new Claim(ClaimTypes.Role, "Cashier") 
+            };
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
             return Ok("Login successful");
         }
 
@@ -69,6 +80,21 @@ namespace PharmaProjectAPI.Controllers
                 return NotFound("No user found with the provided username or email");
             }
             return Ok(userList);
+        }
+
+
+        [HttpDelete]
+        [Route("DeleteUser/{id}")]
+        public IActionResult DeleteUser(int id)
+        {
+            var user = repo.GetUser().FirstOrDefault(u => u.UserId == id);
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+            
+            repo.DeleteUserById(id);
+            return Ok("User deleted successfully");
         }
     }
 }

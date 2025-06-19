@@ -20,10 +20,11 @@ namespace PharmaProjectAPI.Services
 
         private readonly MailSettings mail;
 
-        public UserService(ApplicationDbContext db, IMapper mapper)
+        public UserService(ApplicationDbContext db, IMapper mapper, MailSettings mail)
         {
             this.mapper = mapper;
             this.db = db;
+            this.mail = mail;
         }
 
         public async Task Register(User user)
@@ -59,6 +60,16 @@ namespace PharmaProjectAPI.Services
             var data = mapper.Map<List<UsersDTO>>(userList);
 
             return data;
+        }
+        
+        public void DeleteUserById(int userId)
+        {
+            var user = db.Users.Find(userId);
+            if(user != null)
+            {
+                db.Users.Remove(user);
+                db.SaveChanges();
+            }
         }
 
         public async Task<bool> SendEmailAsync(string toEmail, string subject, string body)

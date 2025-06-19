@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PharmaProjectAPI.Repository;
@@ -20,6 +21,7 @@ namespace PharmaProjectAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Cashier")]
         [Route("GetTotalMedicines")]
         public async Task<IActionResult> GetTotalMedicines()
         {
