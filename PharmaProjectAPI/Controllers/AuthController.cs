@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +8,7 @@ using PharmaProjectAPI.Data;
 using PharmaProjectAPI.DTO;
 using PharmaProjectAPI.Models;
 using PharmaProjectAPI.Repository;
+using System.Security.Claims;
 
 namespace PharmaProjectAPI.Controllers
 {
@@ -13,16 +16,13 @@ namespace PharmaProjectAPI.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly ApplicationDbContext db;
-
         private readonly IMapper mapper;
 
         private readonly IUserRepo repo;
 
-        public AuthController(ApplicationDbContext db, IMapper mapper, IUserRepo repo)
+        public AuthController(IMapper mapper, IUserRepo repo)
         {
             this.mapper = mapper;
-            this.db = db;
             this.repo = repo;
         }
 
@@ -43,6 +43,10 @@ namespace PharmaProjectAPI.Controllers
             user.CreatedDate = DateTime.Now;
 
             await repo.Register(user);
+
+            await repo.SendEmailAsync(reg.Email, "Registration Succesful", "Welcome to Pharma Suite\n" +
+                "Hope you find all your pharmacetucal needs!\n" +
+                "Thank You for your support!!");
             return Ok("Registration successful");
         }
 
@@ -55,6 +59,14 @@ namespace PharmaProjectAPI.Controllers
             {
                 return BadRequest(res);
             }
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, login.Username),
+                new Claim(ClaimTypes.Role, "Cashier") 
+            };
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
             return Ok("Login successful");
         }
 
@@ -68,6 +80,21 @@ namespace PharmaProjectAPI.Controllers
                 return NotFound("No user found with the provided username or email");
             }
             return Ok(userList);
+        }
+
+
+        [HttpDelete]
+        [Route("DeleteUser/{id}")]
+        public IActionResult DeleteUser(int id)
+        {
+            var user = repo.GetUser().FirstOrDefault(u => u.UserId == id);
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+            
+            repo.DeleteUserById(id);
+            return Ok("User deleted successfully");
         }
     }
 }

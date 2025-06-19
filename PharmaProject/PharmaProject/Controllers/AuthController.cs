@@ -4,23 +4,34 @@ using PharmaProject.Models;
 using static System.Net.WebRequestMethods;
 using System.Text;
 using System.Text.Unicode;
+using PharmaProject.Data;
+using PharmaProject.Filters;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PharmaProject.Controllers
 {
+    [GlobalException]
     public class AuthController : Controller
     {
         HttpClient client;
+        private readonly ApplicationDbContext db;
 
-        public AuthController()
+        public AuthController(ApplicationDbContext db)
         {
+            this.db = db;
             HttpClientHandler clientHandler = new HttpClientHandler();
             clientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, error) => true;
             client = new HttpClient(clientHandler);
         }
 
+        [Authorize(Roles = "Admin,Pharmacist")]
         public IActionResult Index()
         {
-            List <UsersDTO> users = new List<UsersDTO>();
+            //throw new Exception("An error occurred while loading the user list.");
+            List<UsersDTO> users = new List<UsersDTO>();
             string url = "https://localhost:7078/api/Auth/GetUser";
 
             HttpResponseMessage response = client.GetAsync(url).Result;
@@ -77,11 +88,59 @@ namespace PharmaProject.Controllers
                 HttpResponseMessage response = await client.PostAsync(url, content);
                 if (response.IsSuccessStatusCode)
                 {
+                    var role = db.Users.Where(u => u.Username == login.Username)
+                        .Select(u => u.Role)
+                        .FirstOrDefault();
+
+                    var claims = new List<Claim>
+{
+                    new Claim(ClaimTypes.Name, login.Username),
+                    new Claim(ClaimTypes.Role, role! ) // 👈 role from API response
+};
+
+                    var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var principal = new ClaimsPrincipal(identity);
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
                     return RedirectToAction("Index");
                 }
             }
             return View(login);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            string url = $"https://localhost:7078/api/Auth/DeleteUser/{id}";
+            HttpResponseMessage response = await client.DeleteAsync(url);
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("Index");
+        }
+
+
+
+        [HttpGet]
+        public JsonResult CheckUsername(string username)
+        {
+            bool exists = db.Users.Any(u => u.Username == username);
+            return Json(!exists);
+        }
+
+        [AcceptVerbs("Post", "Get")]
+        public IActionResult CheckUsernameVal(string username)
+        {
+            var usern = db.Users.Where(x => x.Username == username).FirstOrDefault();
+            if (usern != null)
+            {
+                return Json($"Username {username} is already taken.");
+            }
+            else
+            {
+                return Json(true);
+            }
+        }
     }
 }

@@ -1,0 +1,153 @@
+﻿@model Dashboard
+
+@{
+    ViewData["Title"] = "Pharmacy Dashboard";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-primary">📊 Pharmacy Dashboard</h2>
+
+    <div class="row">
+        <!-- Total Medicines -->
+        <div class="col-md-3">
+            <div class="card bg-info text-white shadow mb-4">
+                <div class="card-body">
+                    <h5>Total Medicines</h5>
+                    <h3>@Model.TotalMedicines</h3>
+                    <p class="mb-0">In inventory</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Sales -->
+        <div class="col-md-3">
+            <div class="card bg-success text-white shadow mb-4">
+                <div class="card-body">
+                    <h5>Total Sales</h5>
+                    <h3>₹ @Model.TotalSales.ToString("N2")</h3>
+                    <p class="mb-0">All-time revenue</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Expiring Soon -->
+        <div class="col-md-3">
+            <div class="card bg-warning text-white shadow mb-4">
+                <div class="card-body">
+                    <h5>Expiring Soon</h5>
+                    <h3>@Model.ExpiringSoon</h3>
+                    <p class="mb-0">Within 30 days</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Low Stock -->
+        <div class="col-md-3">
+            <div class="card bg-danger text-white shadow mb-4">
+                <div class="card-body">
+                    <h5>Low Stock</h5>
+                    <h3>@Model.LowStock</h3>
+                    <p class="mb-0">Below safety level</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-success text-black">
+                    Top 5 Medicines
+                </div>
+                <div class="card-body">
+                    @if(Model.TopMedicines != null && Model.TopMedicines.Any())
+                    {
+                        <ul class="list-group">
+                            @foreach(var medicine in Model.TopMedicines)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">@medicine.Name
+                                    <span class="badge bg-primary rounded">₹ @medicine.PricePerUnit</span>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No Data Available</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card shadow mb-4">
+                    <div class="card-header bg-primary text-white">
+                        Monthly Sales Overview
+                    </div>
+                    <div class="card-body">
+                        @if (Model.MonthlySales != null && Model.MonthlySales.Any())
+                        {
+                            <canvas id="monthlySalesChart" height="100"></canvas>
+                        }
+                        else
+                        {
+                            <p class="text-muted">No monthly sales data available.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        const monthlyLabels = [
+        @string.Join(",", Model.MonthlySales.Select(x => $"\"{x.Month:D2}/{x.Year}\""))
+        ];
+        const monthlyValues = [
+        @string.Join(",", Model.MonthlySales.Select(x => x.TotalAmount.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)))
+        ];
+
+        const ctx = document.getElementById('monthlySalesChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: monthlyLabels,
+                datasets: [{
+                    label: 'Total Sales (₹)',
+                    data: monthlyValues,
+                    fill: true,
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    tension: 0.4, // <-- gives the wave/smooth look
+                    pointRadius: 5,
+                    pointBackgroundColor: 'rgba(54, 162, 235, 1)'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: false,
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '₹' + value;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+}
