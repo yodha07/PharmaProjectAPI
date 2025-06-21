@@ -12,8 +12,8 @@ using PharmaProjectAPI.Data;
 namespace PharmaProjectAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250612153224_test")]
-    partial class test
+    [Migration("20250620205339_shrutiii")]
+    partial class shrutiii
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,33 @@ namespace PharmaProjectAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("PharmaProjectAPI.Models.Cart", b =>
+                {
+                    b.Property<int>("CartId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartId"));
+
+                    b.Property<DateTime>("AddedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MedicineId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CartId");
+
+                    b.HasIndex("MedicineId");
+
+                    b.ToTable("Carts");
+                });
 
             modelBuilder.Entity("PharmaProjectAPI.Models.Customer", b =>
                 {
@@ -41,6 +68,10 @@ namespace PharmaProjectAPI.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmailId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -109,6 +140,10 @@ namespace PharmaProjectAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MedicineId"));
 
+                    b.Property<string>("BatchNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Category")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -120,7 +155,7 @@ namespace PharmaProjectAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("ExpiryDate")
+                    b.Property<DateTime>("ExpiryDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Manufacturer")
@@ -140,9 +175,6 @@ namespace PharmaProjectAPI.Migrations
 
                     b.Property<decimal>("PricePerUnit")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
 
                     b.HasKey("MedicineId");
 
@@ -172,7 +204,6 @@ namespace PharmaProjectAPI.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("PurchaseDate")
@@ -193,15 +224,11 @@ namespace PharmaProjectAPI.Migrations
 
             modelBuilder.Entity("PharmaProjectAPI.Models.PurchaseItem", b =>
                 {
-                    b.Property<int>("ItemId")
+                    b.Property<int>("PurchaseItemId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ItemId"));
-
-                    b.Property<string>("BatchNo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PurchaseItemId"));
 
                     b.Property<decimal>("CostPrice")
                         .HasColumnType("decimal(18,2)");
@@ -213,9 +240,6 @@ namespace PharmaProjectAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("ExpiryDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("MedicineId")
                         .HasColumnType("int");
 
@@ -223,7 +247,6 @@ namespace PharmaProjectAPI.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PurchaseId")
@@ -232,7 +255,7 @@ namespace PharmaProjectAPI.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("ItemId");
+                    b.HasKey("PurchaseItemId");
 
                     b.HasIndex("MedicineId");
 
@@ -256,8 +279,7 @@ namespace PharmaProjectAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CustomerId")
-                        .IsRequired()
+                    b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
                     b.Property<string>("CustomerName")
@@ -299,6 +321,10 @@ namespace PharmaProjectAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("CustomerId")
+                        .IsRequired()
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Discount")
                         .HasColumnType("decimal(18,2)");
 
@@ -312,6 +338,9 @@ namespace PharmaProjectAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("PurchaseItemId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -323,7 +352,11 @@ namespace PharmaProjectAPI.Migrations
 
                     b.HasKey("ItemId");
 
+                    b.HasIndex("CustomerId");
+
                     b.HasIndex("MedicineId");
+
+                    b.HasIndex("PurchaseItemId");
 
                     b.HasIndex("SaleId");
 
@@ -357,7 +390,6 @@ namespace PharmaProjectAPI.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -367,6 +399,38 @@ namespace PharmaProjectAPI.Migrations
                     b.HasKey("SupplierId");
 
                     b.ToTable("Suppliers");
+                });
+
+            modelBuilder.Entity("PharmaProjectAPI.Models.Transaction", b =>
+                {
+                    b.Property<int>("TransactionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TransactionId"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("PaymentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PaymentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaymentStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SaleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TransactionId");
+
+                    b.HasIndex("SaleId");
+
+                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("PharmaProjectAPI.Models.User", b =>
@@ -399,6 +463,17 @@ namespace PharmaProjectAPI.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("PharmaProjectAPI.Models.Cart", b =>
+                {
+                    b.HasOne("PharmaProjectAPI.Models.Medicine", "Medicine")
+                        .WithMany("Carts")
+                        .HasForeignKey("MedicineId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Medicine");
                 });
 
             modelBuilder.Entity("PharmaProjectAPI.Models.Purchase", b =>
@@ -444,9 +519,21 @@ namespace PharmaProjectAPI.Migrations
 
             modelBuilder.Entity("PharmaProjectAPI.Models.SaleItem", b =>
                 {
+                    b.HasOne("PharmaProjectAPI.Models.Customer", "Customer")
+                        .WithMany("SaleItems")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("PharmaProjectAPI.Models.Medicine", "Medicine")
                         .WithMany("SaleItems")
                         .HasForeignKey("MedicineId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("PharmaProjectAPI.Models.PurchaseItem", "PurchaseItem")
+                        .WithMany("SaleItems")
+                        .HasForeignKey("PurchaseItemId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -456,18 +543,37 @@ namespace PharmaProjectAPI.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.Navigation("Customer");
+
                     b.Navigation("Medicine");
+
+                    b.Navigation("PurchaseItem");
+
+                    b.Navigation("Sale");
+                });
+
+            modelBuilder.Entity("PharmaProjectAPI.Models.Transaction", b =>
+                {
+                    b.HasOne("PharmaProjectAPI.Models.Sale", "Sale")
+                        .WithMany("Transactions")
+                        .HasForeignKey("SaleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Sale");
                 });
 
             modelBuilder.Entity("PharmaProjectAPI.Models.Customer", b =>
                 {
+                    b.Navigation("SaleItems");
+
                     b.Navigation("Sales");
                 });
 
             modelBuilder.Entity("PharmaProjectAPI.Models.Medicine", b =>
                 {
+                    b.Navigation("Carts");
+
                     b.Navigation("PurchaseItems");
 
                     b.Navigation("SaleItems");
@@ -478,9 +584,16 @@ namespace PharmaProjectAPI.Migrations
                     b.Navigation("PurchaseItems");
                 });
 
+            modelBuilder.Entity("PharmaProjectAPI.Models.PurchaseItem", b =>
+                {
+                    b.Navigation("SaleItems");
+                });
+
             modelBuilder.Entity("PharmaProjectAPI.Models.Sale", b =>
                 {
                     b.Navigation("SaleItems");
+
+                    b.Navigation("Transactions");
                 });
 
             modelBuilder.Entity("PharmaProjectAPI.Models.Supplier", b =>

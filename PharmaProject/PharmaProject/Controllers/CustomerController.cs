@@ -41,10 +41,18 @@ namespace PharmaProject.Controllers
         [HttpPost]
         public IActionResult AddCustomer(CustomerDTO dto)
         {
+            dto.CreatedAt = DateTime.Now;
+            dto.CreatedBy = "Cashier";
+            dto.ModifiedAt = DateTime.Now;
+            dto.ModifiedBy = "Cashier";
             string url = "https://localhost:7078/api/Customer/AddCustomer/";
             var JsonData = JsonConvert.SerializeObject(dto);
             StringContent content = new StringContent(JsonData, Encoding.UTF8, "application/json");
             HttpResponseMessage response = client.PostAsync(url, content).Result;
+            {
+                string error = response.Content.ReadAsStringAsync().Result;
+                Console.WriteLine("Error: " + error);
+            }
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction("Index");

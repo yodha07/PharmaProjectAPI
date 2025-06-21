@@ -20,6 +20,8 @@ namespace PharmaProjectAPI.Mapping
             CreateMap<Supplier, SupplierDTO2>().ReverseMap();
             CreateMap<Supplier, SupplierDTO3>().ReverseMap();
             CreateMap<Medicine, PurchaseMedDTO>().ReverseMap();
+            CreateMap<CartDTO, Cart>().ReverseMap();
+            CreateMap<TransactionDTO, Transaction>().ReverseMap();
         }
     }
 }

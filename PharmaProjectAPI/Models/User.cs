@@ -15,5 +15,7 @@ namespace PharmaProjectAPI.Models
         [Required]
         public string Role { get; set; } // Admin, Pharmacist, Cashier, User
         public DateTime CreatedDate { get; set; } = DateTime.Now;
+
+        public List<Cart> Carts { get; set; }
     }
 }

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PharmaProjectAPI.Data;
 using PharmaProjectAPI.DTO;
-using PharmaProjectAPI.Migrations;
+//using PharmaProjectAPI.Migrations;
 using PharmaProjectAPI.Models;
 using PharmaProjectAPI.Repository;
 

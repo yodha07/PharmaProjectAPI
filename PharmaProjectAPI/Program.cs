@@ -25,10 +25,13 @@ builder.Services.AddScoped<IUserRepo, UserService>();
 builder.Services.AddScoped<ICustomerRepo, CustomerService>();
 
 builder.Services.AddScoped<ISupplierRepo, SupplierService>();
+builder.Services.AddScoped<IMedicine, MedicineService>();
 
 builder.Services.AddScoped<IPurchaseRepo, PurchaseService>();
 
 builder.Services.AddScoped<IDashboard, DashboardService>();
+builder.Services.AddScoped<ICartRepository, CartService >();
+builder.Services.AddScoped<ITransactionRepo, TransactionService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
 {
