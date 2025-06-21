@@ -19,7 +19,7 @@ namespace PharmaProject.Controllers
             client.BaseAddress = new Uri("https://localhost:7078/api/Dashboard/");
         }
 
-        [Authorize(Roles = "Admin,Pharmacist")]
+        [Authorize(Roles = "Admin,Pharmacist, Cashier")]
         public async Task<IActionResult> Index()
         {
             var model = new Models.Dashboard();

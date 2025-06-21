@@ -5,7 +5,7 @@
 //        $.ajax({
 //            url: '/Auth/CheckUsername',
 //            type: "GET",
-//            data: { username: userName }, 
+//            data: { username: userName },
 //            success: function (data) {
 //                if (data === true) {
 //                    $("#usernameValidation")
@@ -30,3 +30,5 @@
 //        });
 //    });
 //});
+
+

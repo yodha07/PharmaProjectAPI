@@ -26,6 +26,8 @@ builder.Services.AddScoped<ICustomerRepo, CustomerService>();
 
 builder.Services.AddScoped<ISupplierRepo, SupplierService>();
 
+builder.Services.AddScoped<IPurchaseRepo, PurchaseService>();
+
 builder.Services.AddScoped<IDashboard, DashboardService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>

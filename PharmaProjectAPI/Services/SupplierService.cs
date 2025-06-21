@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Validations;
 using PharmaProjectAPI.Data;
 using PharmaProjectAPI.DTO;
@@ -54,11 +55,19 @@ namespace PharmaProjectAPI.Services
             }
         }
 
-        public void DeleteSupplier(int id)
+        public int DeleteSupplier(int id)
         {
-            var data = db.Suppliers.Find(id);
-            db.Remove(data);
-            db.SaveChanges();
+            var supplier = db.Suppliers.Include(x => x.Purchases).FirstOrDefault(x => x.SupplierId == id);
+            if (supplier.Purchases.Count > 0)
+            {
+                return 0;
+            }
+            else
+            {
+                db.Suppliers.Remove(supplier);
+                db.SaveChanges();
+                return 1;
+            }
         }
     }
 }

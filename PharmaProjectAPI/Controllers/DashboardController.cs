@@ -21,7 +21,7 @@ namespace PharmaProjectAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin,Cashier")]
+        [Authorize(Roles = "Admin, Cashier")]
         [Route("GetTotalMedicines")]
         public async Task<IActionResult> GetTotalMedicines()
         {

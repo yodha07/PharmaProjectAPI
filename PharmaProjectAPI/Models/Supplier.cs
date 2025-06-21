@@ -15,6 +15,7 @@ namespace PharmaProjectAPI.Models
         public DateTime? ModifiedAt { get; set; }
         public string? ModifiedBy { get; set; }
 
+        public List<PurchaseCart> PurchaseCarts { get; set; }
         public List<Purchase> Purchases { get; set; }
     }
 }

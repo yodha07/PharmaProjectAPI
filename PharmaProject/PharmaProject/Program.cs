@@ -10,7 +10,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LoginPath = "/Auth/Login";
         options.AccessDeniedPath = "/Auth/AccessDenied";
     });
-builder.WebHost.UseUrls("http://localhost:7078");
+//builder.WebHost.UseUrls("http://localhost:7078");
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

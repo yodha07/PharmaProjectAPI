@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using PharmaProjectAPI.DTO;
 using PharmaProjectAPI.Models;
 
@@ -12,5 +13,6 @@ namespace PharmaProjectAPI.Repository
         List<UsersDTO> GetUser();
         Task <bool> SendEmailAsync(string toEmail, string subject, string body);
         void DeleteUserById(int id);
+        Task<string> GetUserRole(string username);
     }
 }

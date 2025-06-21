@@ -27,7 +27,7 @@ namespace PharmaProject.Controllers
             client = new HttpClient(clientHandler);
         }
 
-        [Authorize(Roles = "Admin,Pharmacist")]
+        [Authorize(Roles = "Admin,Pharmacist, Cashier")]
         public IActionResult Index()
         {
             //throw new Exception("An error occurred while loading the user list.");
@@ -128,6 +128,14 @@ namespace PharmaProject.Controllers
             bool exists = db.Users.Any(u => u.Username == username);
             return Json(!exists);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login", "Auth");
+        }
+
 
         [AcceptVerbs("Post", "Get")]
         public IActionResult CheckUsernameVal(string username)
