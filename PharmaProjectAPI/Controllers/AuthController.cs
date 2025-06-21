@@ -20,10 +20,12 @@ namespace PharmaProjectAPI.Controllers
 
         private readonly IUserRepo repo;
 
-        public AuthController(IMapper mapper, IUserRepo repo)
+        private readonly ApplicationDbContext db;
+        public AuthController(IMapper mapper, IUserRepo repo, ApplicationDbContext db)
         {
             this.mapper = mapper;
             this.repo = repo;
+            this.db = db;
         }
 
         [HttpPost]
@@ -38,7 +40,7 @@ namespace PharmaProjectAPI.Controllers
 
             string pass = BCrypt.Net.BCrypt.HashPassword(reg.PasswordHash);
             var user = mapper.Map<User>(reg);
-            user.Role = "Cashier";
+            user.Role = "User";
             user.PasswordHash = pass;
             user.CreatedDate = DateTime.Now;
 
@@ -59,10 +61,13 @@ namespace PharmaProjectAPI.Controllers
             {
                 return BadRequest(res);
             }
+
+            var role = repo.GetUserRole(login.Username);
+
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, login.Username),
-                new Claim(ClaimTypes.Role, "Cashier") 
+                new Claim(ClaimTypes.Role, await role) 
             };
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);

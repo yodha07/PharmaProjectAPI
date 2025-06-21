@@ -72,6 +72,11 @@ namespace PharmaProjectAPI.Services
             }
         }
 
+        public async Task<string?> GetUserRole(string username)
+        {
+            return await db.Users.Where(u => u.Username == username).Select(u => u.Role).FirstOrDefaultAsync();
+        }
+
         public async Task<bool> SendEmailAsync(string toEmail, string subject, string body)
         {
             try
