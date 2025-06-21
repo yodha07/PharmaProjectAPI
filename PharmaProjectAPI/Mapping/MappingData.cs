@@ -19,9 +19,26 @@ namespace PharmaProjectAPI.Mapping
             CreateMap<Supplier, SupplierDTO>().ReverseMap();
             CreateMap<Supplier, SupplierDTO2>().ReverseMap();
             CreateMap<Supplier, SupplierDTO3>().ReverseMap();
+
             CreateMap<Medicine, PurchaseMedDTO>().ReverseMap();
+
             CreateMap<CartDTO, Cart>().ReverseMap();
             CreateMap<TransactionDTO, Transaction>().ReverseMap();
+
+
+            CreateMap<PurchaseCart, PurchaseCartDTO>().ReverseMap();
+            CreateMap<PurchaseCart, PurchaseCartDTO2>()
+            .ForMember(dest => dest.Mname, opt => opt.MapFrom(src => src.Medicine != null ? src.Medicine.Name : ""))
+            .ForMember(dest => dest.Sname, opt => opt.MapFrom(src => src.Supplier != null ? src.Supplier.Name : ""));
+
+            CreateMap<Purchase, PurchaseDTO>().ReverseMap();
+            CreateMap<Purchase, PurchaseDTO2>()
+            .ForMember(dest => dest.Sname, opt => opt.MapFrom(src => src.Supplier != null ? src.Supplier.Name : ""));
+
+            CreateMap<PurchaseItem, PurchaseItemDTO>().ReverseMap();
+            CreateMap<PurchaseItem, PurchaseItemDTO2>()
+            .ForMember(dest => dest.Mname, opt => opt.MapFrom(src => src.Medicine != null ? src.Medicine.Name : ""));
+
         }
     }
 }
