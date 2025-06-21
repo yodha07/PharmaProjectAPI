@@ -20,5 +20,6 @@ namespace PharmaProjectAPI.Models
         public List<PurchaseCart> PurchaseCarts { get; set; }
         public List<PurchaseItem> PurchaseItems { get; set; }
         public List<SaleItem> SaleItems { get; set; }
+        public List<Cart> Carts { get; set; }
     }
 }

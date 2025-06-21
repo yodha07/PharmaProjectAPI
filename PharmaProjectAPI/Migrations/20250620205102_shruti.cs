@@ -5,24 +5,25 @@
 namespace PharmaProjectAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class demo : Migration
+    public partial class shruti : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
+            migrationBuilder.AddColumn<string>(
                 name: "Address",
                 table: "Customers",
-                newName: "EmailId");
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "EmailId",
-                table: "Customers",
-                newName: "Address");
+            migrationBuilder.DropColumn(
+                name: "Address",
+                table: "Customers");
         }
     }
 }

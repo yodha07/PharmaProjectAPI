@@ -15,18 +15,19 @@ namespace PharmaProjectAPI.Services
             this.db = db;
         }
 
-        public void AddCustomer(CustomerDTO customer)
+        public void AddCustomer(CustomerDTO2 customer)
         {
             var data = new Customer()
             {
                
                 Name = customer.Name,
+                Address = customer.Address,
                 EmailId = customer.EmailId,
                 Mobile=customer.Mobile,
                 CreatedAt = DateTime.Now,
                 CreatedBy="Cashier",
-                ModifiedAt= DateTime.Now,
-                ModifiedBy="Cashier"
+                //ModifiedAt= DateTime.Now,
+                //ModifiedBy="Cashier"
             };
             db.Customers.Add(data);
             db.SaveChanges();
@@ -53,19 +54,22 @@ namespace PharmaProjectAPI.Services
         }
         public Customer GetCustomerById(int id)
         {
-            return db.Customers.Find(id);
-          
+            var data= db.Customers.Find(id);
+            return data;
+
+
         }
-        public void UpdateCustomer(CustomerDTO customer)
+        public void UpdateCustomer(CustomerDTO3 customer)
         {
             var data = new Customer()
             {
-                CustomerId = customer.CustomerId,
+                //CustomerId = customer.CustomerId,
                 Name = customer.Name,
                 EmailId = customer.EmailId,
+                Address= customer.Address,
                 Mobile = customer.Mobile,
-                CreatedAt = DateTime.Now,
-                CreatedBy = "Cashier",
+                //CreatedAt = DateTime.Now,
+                //CreatedBy = "Cashier",
                 ModifiedAt = DateTime.Now,
                 ModifiedBy = "Cashier"
             };

@@ -5,7 +5,7 @@
 namespace PharmaProjectAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class adityaS : Migration
+    public partial class done : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

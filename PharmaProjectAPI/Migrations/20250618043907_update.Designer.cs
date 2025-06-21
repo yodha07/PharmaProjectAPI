@@ -12,8 +12,8 @@ using PharmaProjectAPI.Data;
 namespace PharmaProjectAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250618180835_adityaS")]
-    partial class adityaS
+    [Migration("20250618043907_update")]
+    partial class update
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -290,6 +290,9 @@ namespace PharmaProjectAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Discount")
                         .HasColumnType("decimal(18,2)");
 
@@ -316,6 +319,8 @@ namespace PharmaProjectAPI.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("ItemId");
+
+                    b.HasIndex("CustomerId");
 
                     b.HasIndex("MedicineId");
 
@@ -439,6 +444,12 @@ namespace PharmaProjectAPI.Migrations
 
             modelBuilder.Entity("PharmaProjectAPI.Models.SaleItem", b =>
                 {
+                    b.HasOne("PharmaProjectAPI.Models.Customer", "Customer")
+                        .WithMany("SaleItems")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("PharmaProjectAPI.Models.Medicine", "Medicine")
                         .WithMany("SaleItems")
                         .HasForeignKey("MedicineId")
@@ -457,6 +468,8 @@ namespace PharmaProjectAPI.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.Navigation("Customer");
+
                     b.Navigation("Medicine");
 
                     b.Navigation("PurchaseItem");
@@ -466,6 +479,8 @@ namespace PharmaProjectAPI.Migrations
 
             modelBuilder.Entity("PharmaProjectAPI.Models.Customer", b =>
                 {
+                    b.Navigation("SaleItems");
+
                     b.Navigation("Sales");
                 });
 

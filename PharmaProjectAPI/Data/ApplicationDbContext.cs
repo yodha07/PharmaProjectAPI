@@ -19,6 +19,13 @@ namespace PharmaProjectAPI.Data
         public DbSet<Sale> Sales { get; set; }
         public DbSet<SaleItem> SaleItems { get; set; }
         public DbSet<Customer> Customers { get; set; }
+
+        public DbSet<Cart> Carts { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
+
+        //public DbSet<Cart> Carts { get; set; }
+        //public DbSet<Transaction> Transactions { get; set; }
+
         public DbSet<Expense> Expenses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -72,6 +79,26 @@ namespace PharmaProjectAPI.Data
                 .HasForeignKey(s => s.CustomerId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+
+            modelBuilder.Entity<Transaction>()
+                .HasOne(t => t.Sale)
+                .WithMany(s => s.Transactions) // <== Add a List<Transaction> to Sale model
+                .HasForeignKey(t => t.SaleId)
+                .OnDelete(DeleteBehavior.Restrict); 
+
+            modelBuilder.Entity<Cart>()
+            .HasOne(c => c.Medicine)
+            .WithMany(m => m.Carts) 
+            .HasForeignKey(c => c.MedicineId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Cart>()
+    .HasOne(c => c.User)
+    .WithMany(u => u.Carts)
+    .HasForeignKey(c => c.UserId)
+    .OnDelete(DeleteBehavior.Restrict);
+
+
             // PurchaseCart - Medicine
             modelBuilder.Entity<PurchaseCart>()
                 .HasOne(p => p.Medicine)
@@ -85,6 +112,7 @@ namespace PharmaProjectAPI.Data
                 .WithMany(s => s.PurchaseCarts)
                 .HasForeignKey(p => p.SupplierId)
                 .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }
