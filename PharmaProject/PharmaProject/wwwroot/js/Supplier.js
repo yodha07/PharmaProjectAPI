@@ -57,6 +57,10 @@ $('#suppModal').click(function () {
     $('#SupplierId').val("");
     $('#exModal').modal('show');
     $('#exampleModalLabel').html("Add Supplier");
+
+    $('#Name, #Contact, #Address')
+        .removeClass('is-valid is-invalid');
+    $('#savebtn').prop('disabled', true);
 });
 
 $('#savebtn').click(function () {
@@ -68,6 +72,9 @@ $('#savebtn').click(function () {
         $('#Contact').addClass('is-invalid');
         $('#Address').addClass('is-invalid');
         return;
+    }
+    else {
+        $('#Name, #Contact, #Address').removeClass('is-invalid').addClass('is-valid');
     }
     var obj = $('#SuppForm').serialize();
 
@@ -139,6 +146,12 @@ function deleteSupp(id) {
 }
 
 function editSupp(id) {
+    $('#Name, #Contact, #Address')
+        .removeClass('is-invalid is-valid');
+    $('#Name, #Contact, #Address')
+        .addClass('is-valid');
+    checkFormValidity();
+
     $.ajax({
         url: '/Supplier/GetSupplierById?id=' + id,
         type: 'Get',
@@ -157,6 +170,13 @@ function editSupp(id) {
         }
     });
 }   
+function checkFormValidity() {
+    const allValid = $('#Name').hasClass('is-valid') &&
+        $('#Contact').hasClass('is-valid') &&
+        $('#Address').hasClass('is-valid');
+    $('#savebtn').prop('disabled', !allValid);
+}
+
 
 $('#Name').keyup(function () {
     var name = $(this).val();
@@ -168,6 +188,7 @@ $('#Name').keyup(function () {
         $(this).addClass('is-invalid');
         $(this).removeClass('is-valid');
     }
+    checkFormValidity();
 });
 
 $('#Contact').keyup(function () {
@@ -181,6 +202,7 @@ $('#Contact').keyup(function () {
         $(this).removeClass('is-invalid');
         $(this).addClass('is-valid');
     }
+    checkFormValidity();
 });
 
 $('#Address').keyup(function () {
@@ -193,6 +215,7 @@ $('#Address').keyup(function () {
         $(this).addClass('is-invalid');
         $(this).removeClass('is-valid');
     }
+    checkFormValidity();
 });
 
 //$('#SuppForm').submit(function (e) {

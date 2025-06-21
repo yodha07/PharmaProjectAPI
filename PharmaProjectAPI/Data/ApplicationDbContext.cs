@@ -13,6 +13,7 @@ namespace PharmaProjectAPI.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Medicine> Medicines { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
+        public DbSet<PurchaseCart> PurchaseCarts { get; set; }
         public DbSet<Purchase> Purchases { get; set; }
         public DbSet<PurchaseItem> PurchaseItems { get; set; }
         public DbSet<Sale> Sales { get; set; }
@@ -69,6 +70,20 @@ namespace PharmaProjectAPI.Data
                 .HasOne(s => s.Customer)
                 .WithMany(c => c.Sales)
                 .HasForeignKey(s => s.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // PurchaseCart - Medicine
+            modelBuilder.Entity<PurchaseCart>()
+                .HasOne(p => p.Medicine)
+                .WithMany(m => m.PurchaseCarts)
+                .HasForeignKey(p => p.MedicineId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // PurchaseCart - Supplier
+            modelBuilder.Entity<PurchaseCart>()
+                .HasOne(p => p.Supplier)
+                .WithMany(s => s.PurchaseCarts)
+                .HasForeignKey(p => p.SupplierId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
