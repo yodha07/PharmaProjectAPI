@@ -1,4 +1,4 @@
-﻿@model PharmaProject.Models.CustomerDTO
+﻿@model PharmaProject.Models.CustomerDTO2
 
 @{
     ViewData["Title"] = "AddCustomer";
@@ -28,7 +28,11 @@
                 <input asp-for="EmailId" class="form-control" />
                 <span asp-validation-for="EmailId" class="text-danger"></span>
             </div>
-            
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
