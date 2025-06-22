@@ -8,6 +8,7 @@ namespace PharmaProjectAPI.Models
         public int UserId {  get; set; }
 
 
+
         public int MedicineId { get; set; } 
         public int Quantity {  get; set; }
         public DateTime AddedAt { get; set; }
@@ -21,12 +22,15 @@ namespace PharmaProjectAPI.Models
         public User User { get; set; }
 
 
+
         public string MedicineId {  get; set; }
         public int Quantity {  get; set; }
         public DateTime AddedAt { get; set; }
 
         [ForeignKey("MedicineId")]
         public Medicine Medicine { get; set; }
+
+
 
     }
 }
