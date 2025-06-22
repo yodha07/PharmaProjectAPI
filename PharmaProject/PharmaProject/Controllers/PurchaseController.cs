@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using PharmaProject.Helper;
 using PharmaProject.Models;
 
 namespace PharmaProject.Controllers
@@ -161,5 +162,16 @@ namespace PharmaProject.Controllers
                 return Json(new { success = false });
             }
         }
+
+        [HttpPost]
+        public IActionResult GeneratePurchaseInvoicePdf([FromBody] PdfRequestModel model)
+        {
+            if (model == null || model.CartItems == null || !model.CartItems.Any())
+                return BadRequest("Invalid cart data");
+
+            var path = InvoicePdfGenerator.GeneratePurchaseInvoicePdf(model.CartItems, model.Total, model.InvoiceNo);
+            return Json(new { success = true, path = path });
+        }
+
     }
 }

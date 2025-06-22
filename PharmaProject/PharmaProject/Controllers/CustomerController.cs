@@ -39,12 +39,10 @@ namespace PharmaProject.Controllers
 
         }
         [HttpPost]
-        public IActionResult AddCustomer(CustomerDTO dto)
+        public IActionResult AddCustomer(CustomerDTO2 dto)
         {
             dto.CreatedAt = DateTime.Now;
             dto.CreatedBy = "Cashier";
-            dto.ModifiedAt = DateTime.Now;
-            dto.ModifiedBy = "Cashier";
             string url = "https://localhost:7078/api/Customer/AddCustomer/";
             var JsonData = JsonConvert.SerializeObject(dto);
             StringContent content = new StringContent(JsonData, Encoding.UTF8, "application/json");
@@ -74,12 +72,12 @@ namespace PharmaProject.Controllers
          public IActionResult UpdateCustomer(int id)
         {
             string url = "https://localhost:7078/api/Customer/EditCustomer/";
-            CustomerDTO data = new CustomerDTO();
+            CustomerDTO3 data = new CustomerDTO3();
             HttpResponseMessage response = client.GetAsync(url+id).Result;
             if (response.IsSuccessStatusCode)
             {
                 var json = response.Content.ReadAsStringAsync().Result;
-                var obj = JsonConvert.DeserializeObject<CustomerDTO>(json);
+                var obj = JsonConvert.DeserializeObject<CustomerDTO3>(json);
                 if (obj != null)
                 {
                     data = obj;
@@ -88,8 +86,10 @@ namespace PharmaProject.Controllers
             return View(data);
         }
         [HttpPost]
-        public IActionResult UpdateCustomer(CustomerDTO dto)
+        public IActionResult UpdatedCustomer(CustomerDTO3 dto)
         {
+            dto.ModifiedAt = DateTime.Now;
+            dto.ModifiedBy = "Cashier";
             string url = "https://localhost:7078/api/Customer/UpdateCustomer/";
             var JsonData = JsonConvert.SerializeObject(dto);
             StringContent content = new StringContent(JsonData, Encoding.UTF8, "application/json");

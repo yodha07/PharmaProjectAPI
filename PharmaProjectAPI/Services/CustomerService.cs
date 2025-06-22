@@ -19,14 +19,13 @@ namespace PharmaProjectAPI.Services
         {
             var data = new Customer()
             {
-               
                 Name = customer.Name,
                 Address = customer.Address,
                 EmailId = customer.EmailId,
                 Mobile=customer.Mobile,
-                CreatedAt = DateTime.Now,
-                CreatedBy="Cashier",
-                //ModifiedAt= DateTime.Now,
+                CreatedAt = customer.CreatedAt,
+                CreatedBy= customer.CreatedBy
+                //ModifiedAt= DateTime.Now
                 //ModifiedBy="Cashier"
             };
             db.Customers.Add(data);
@@ -52,29 +51,53 @@ namespace PharmaProjectAPI.Services
              }
             db.SaveChanges();
         }
-        public Customer GetCustomerById(int id)
+        public CustomerDTO3 GetCustomerById(int id)
         {
-            var data= db.Customers.Find(id);
+            var customer= db.Customers.Find(id);
+            var data = new CustomerDTO3()
+            {
+                CustomerId=customer.CustomerId,
+                Name = customer.Name,
+                Address = customer.Address,
+                EmailId = customer.EmailId,
+                Mobile = customer.Mobile,
+                ModifiedAt = customer.ModifiedAt,
+                ModifiedBy = customer.ModifiedBy
+                //ModifiedAt= DateTime.Now
+                //ModifiedBy="Cashier"
+            };
             return data;
-
-
         }
         public void UpdateCustomer(CustomerDTO3 customer)
         {
-            var data = new Customer()
+            var existing = db.Customers.FirstOrDefault(x => x.CustomerId == customer.CustomerId);
+            if (existing != null)
             {
-                //CustomerId = customer.CustomerId,
-                Name = customer.Name,
-                EmailId = customer.EmailId,
-                Address= customer.Address,
-                Mobile = customer.Mobile,
-                //CreatedAt = DateTime.Now,
-                //CreatedBy = "Cashier",
-                ModifiedAt = DateTime.Now,
-                ModifiedBy = "Cashier"
-            };
-            db.Customers.Update(data);
-            db.SaveChanges();
+                existing.Name = customer.Name;
+                existing.EmailId = customer.EmailId;
+                existing.Address = customer.Address;
+                existing.Mobile= customer.Mobile;
+                existing.ModifiedAt = customer.ModifiedAt;
+                existing.ModifiedBy = customer.ModifiedBy;
+
+                db.SaveChanges();
+            }
+
+
+            //var data = new Customer()
+            //{
+            //    CustomerId = customer.CustomerId,
+            //    Name = customer.Name,
+            //    EmailId = customer.EmailId,
+            //    Address= customer.Address,
+            //    Mobile = customer.Mobile,
+            //    //CreatedAt = DateTime.Now,
+            //    //CreatedBy = "Cashier",
+            //    ModifiedAt = DateTime.Now,
+            //    ModifiedBy = "Cashier"
+            //};
+            //db.Customers.Update(data);
+            //db.SaveChanges();
         }
 
         public List<Customer> GetAll()

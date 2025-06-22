@@ -94,8 +94,8 @@ function FetchCart(){
                         <td>${item.sname}</td>
                         <td>${item.mname}</td>
                         <td>${item.quantity}</td>
-                        <td>${item.ppu}</td>
-                        <td><strong>${total.toFixed(2)}</strong></td>
+                        <td><span class="badge bg-success">₹${item.ppu}</span></td>
+                        <td><span class="badge bg-success"><strong>₹${total.toFixed(2)}</strong></span></td>
                         <td>
                             <button type="button" class="btn btn-outline-danger btn-sm me-2" onclick="delSingCart('${item.cartId}')">
                             <i class="bi bi-trash3-fill me-1"></i>

@@ -12,44 +12,110 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">PharmaProject</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+
+                <div class="collapse navbar-collapse" id="navbarMain">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <form asp-controller="Auth" asp-action="Logout" method="post" class="d-inline">
-                                <button class="btn btn-outline-danger">Logout</button>
-                            </form>
-                        }
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                                </li>
 
+
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="medicineDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Medicine Management
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="medicineDropdown">
+                                        <li><a class="dropdown-item" asp-controller="Medicine" asp-action="Add">Add Medicine</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Medicine" asp-action="Index">See Medicines</a></li>
+                                    </ul>
+                                </li>
+
+                
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="supplierDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Supplier Management
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="supplierDropdown">
+                                        @* <li><a class="dropdown-item" asp-controller="Supplier" asp-action="AddSupplier">Add Supplier</a></li> *@
+                                        <li><a class="dropdown-item" asp-controller="Supplier" asp-action="Index">View Supplier</a></li>
+                                    </ul>
+                                </li>
+
+                              
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="purchaseDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Purchase Management
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="purchaseDropdown">
+                                        <li><a class="dropdown-item" asp-controller="Purchase" asp-action="Index">Add Purchase</a></li>
+                                        <li><a class="dropdown-item" asp-controller="PurchaseItem" asp-action="Index">View Purchases</a></li>
+                                    </ul>
+                                </li>
+
+                 
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="customerDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Customer Management
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="customerDropdown">
+                                        <li><a class="dropdown-item" asp-controller="Customer" asp-action="AddCustomer">Add Customer</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Customer" asp-action="Index">View Customers</a></li>
+                                    </ul>
+                                </li>
+
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="dashboardDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Dashboads
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="DashboardDropdown">
+                                        <li><a class="dropdown-item" asp-controller="Dashboard" asp-action="Index">Dash1</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Dashboard" asp-action="ReportView">Dash2</a></li>
+                                    </ul>
+                                </li>
+                            }
+                        }
+                    </ul>
+
+
+                    <ul class="navbar-nav ms-auto">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <form asp-controller="Auth" asp-action="Logout" method="post" class="d-inline">
+                                    <button class="btn btn-outline-danger">Logout</button>
+                                </form>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer text-muted mt-5">
         <div class="container">
-            &copy; 2025 - PharmaProject - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2025 - PharmaProject - <a asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+
+    <!-- Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

@@ -10,6 +10,6 @@ namespace PharmaProjectAPI.Repository
         void DeleteCustomer(int id);
         void Delete(List<int> ids);
         List<Customer> GetAll();
-        Customer GetCustomerById(int id);
+        CustomerDTO3 GetCustomerById(int id);
     }
 }
