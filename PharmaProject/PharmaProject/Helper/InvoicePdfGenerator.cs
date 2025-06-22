@@ -21,13 +21,13 @@ namespace PharmaProject.Helper
             PdfWriter.GetInstance(doc, new FileStream(filePath, FileMode.Create));
             doc.Open();
 
-            // Header
+            
             doc.Add(new Paragraph("Pharma Invoice"));
             doc.Add(new Paragraph($"Invoice No: {invoiceNo}"));
             doc.Add(new Paragraph($"Date: {DateTime.Now.ToString("dd-MM-yyyy")}"));
             doc.Add(new Paragraph(" "));
 
-            // Table
+            
             PdfPTable table = new PdfPTable(5);
             table.AddCell("Medicine");
             table.AddCell("Quantity");
@@ -44,7 +44,6 @@ namespace PharmaProject.Helper
                 table.AddCell(item.Sname);
             }
 
-            // Totals
             table.AddCell("Subtotal");
             table.AddCell("");
             table.AddCell("");
@@ -67,7 +66,7 @@ namespace PharmaProject.Helper
             doc.Add(table);
             doc.Close();
 
-            return $"/PurchaseInvoices/{invoiceNo}.pdf"; // return relative path for frontend use
+            return $"/PurchaseInvoices/{invoiceNo}.pdf"; 
         }
     }
 }

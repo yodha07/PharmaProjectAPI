@@ -8,7 +8,6 @@ let grandTotal = 0;
 $('#paybtn').click(function (e) {
     e.preventDefault();
 
-    // 1. Fetch Cart Items First
     $.ajax({
         url: '/Purchase/GetCart',
         type: 'GET',
