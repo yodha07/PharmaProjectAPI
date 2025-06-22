@@ -20,10 +20,12 @@ namespace PharmaProjectAPI.Data
         public DbSet<SaleItem> SaleItems { get; set; }
         public DbSet<Customer> Customers { get; set; }
 
+
         public DbSet<Cart> Carts { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
 
       
+
 
         public DbSet<Expense> Expenses { get; set; }
 
