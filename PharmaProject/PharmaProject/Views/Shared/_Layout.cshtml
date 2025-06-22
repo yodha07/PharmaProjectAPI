@@ -47,8 +47,8 @@
                                         Supplier Management
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="supplierDropdown">
-                                        <li><a class="dropdown-item" asp-controller="Supplier" asp-action="AddSupplier">Add Supplier</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Supplier" asp-action="GetAllSupplier">View Supplier</a></li>
+                                        @* <li><a class="dropdown-item" asp-controller="Supplier" asp-action="AddSupplier">Add Supplier</a></li> *@
+                                        <li><a class="dropdown-item" asp-controller="Supplier" asp-action="Index">View Supplier</a></li>
                                     </ul>
                                 </li>
 
@@ -58,8 +58,8 @@
                                         Purchase Management
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="purchaseDropdown">
-                                        <li><a class="dropdown-item" asp-controller="Purchase" asp-action="AddPurchase">Add Purchase</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Purchase" asp-action="GetPurchase">View Purchases</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Purchase" asp-action="Index">Add Purchase</a></li>
+                                        <li><a class="dropdown-item" asp-controller="PurchaseItem" asp-action="Index">View Purchases</a></li>
                                     </ul>
                                 </li>
 
