@@ -9,6 +9,7 @@ namespace PharmaProjectAPI.Repository
         void Delete(int id);
         MedicineEdit GetMedicineId(int id);
         void Edit(int id,MedicineEdit edit);
-       List<Medicine> fetch();
+        List<Medicine> fetch();
+        List<MedicineStockDto> GetMedicineStock();
     }
 }

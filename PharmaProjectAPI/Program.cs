@@ -27,6 +27,7 @@ builder.Services.AddScoped<IDashboard, DashboardService>();
 builder.Services.AddScoped<ICartRepository, CartService>();
 builder.Services.AddScoped<ITransactionRepo, TransactionService>();
 
+
 // ✅ Configure authentication only once
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
@@ -38,6 +39,11 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     });
 
 builder.Services.AddCors(options =>
+
+builder.Services.AddScoped<IStockRepo, StockService>();
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+
 {
     options.AddPolicy("AllowFrontend", policy =>
     {

@@ -1,0 +1,26 @@
+﻿@model List<PharmaProject.Models.MedicineStockDto>
+@{
+    Layout = null;
+    int sr = 1;
+}
+<div class="modal-table-header">
+    <div>Sr No</div>
+    <div>Item Name</div>
+    <div>Batch</div>
+    <div>Qty</div>
+    <div>Cost Price</div>
+    <div>Expiry</div>
+</div>
+
+@foreach (var med in Model)
+{
+    <div class="modal-row" onclick="selectFromModal(this)">
+        <div>@sr</div>
+        <div>@med.Name</div>
+        <div>@med.BatchNo</div>
+        <div>@med.TotalQuantity</div>
+        <div>₹@med.CostPrice</div>
+        <div>@med.ExpiryDate.ToString("MM/yyyy")</div>
+    </div>
+    sr++;
+}

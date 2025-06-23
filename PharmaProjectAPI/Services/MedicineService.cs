@@ -97,5 +97,35 @@ namespace PharmaProjectAPI.Services
             db.Medicines.Update(f);
             db.SaveChanges();
         }
+        public List<MedicineStockDto> GetMedicineStock()
+        {
+            var stockData = db.PurchaseItems
+                .GroupBy(pi => pi.MedicineId)
+                .Select(group => new
+                {
+                    MedicineId = group.Key,
+                    TotalQuantity = group.Sum(x => x.Quantity),
+                    CostPrice = group.First().CostPrice
+                })
+                .Join(db.Medicines,
+                      g => g.MedicineId,
+                      m => m.MedicineId,
+                      (g, m) => new MedicineStockDto
+                      {
+                          MedicineId = m.MedicineId,
+                          Name = m.Name,
+                          Category = m.Category,
+                          BatchNo = m.BatchNo,
+                          ExpiryDate = m.ExpiryDate,
+                          TotalQuantity = g.TotalQuantity,
+                          CostPrice = g.CostPrice
+                      })
+                .ToList();
+
+            return stockData;
+        }
+
+
+
     }
 }
