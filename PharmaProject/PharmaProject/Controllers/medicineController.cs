@@ -132,14 +132,14 @@ namespace PharmaProject.Controllers
         
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(MedicineM m)
+        public IActionResult Edit(MedicineM m)
         {
 
             string url = "https://localhost:7078/api/medicine/Edit/";
             var jason = JsonConvert.SerializeObject(m);
             StringContent content = new StringContent(jason, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage response = await client.PutAsync(url, content);
+            HttpResponseMessage response =  client.PutAsync(url, content).Result;
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction("Index");

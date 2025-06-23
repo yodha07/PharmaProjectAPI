@@ -1,0 +1,291 @@
+﻿@{
+    Layout = null;
+    var now = DateTime.Now.ToString("dd-MM-yyyy hh:mm tt");
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Counter Sale Demo</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            background: #f0f0f0;
+            padding-bottom: 180px;
+        }
+
+        .header {
+            background-color: #009999;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+        }
+
+        .nav-row {
+            background-color: white;
+            color: #009999;
+            font-weight: bold;
+            padding: 10px 0;
+            display: grid;
+            grid-template-columns: 2fr 2fr 1fr 1fr 1fr 1fr;
+            text-align: center;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 2fr 2fr 1fr 1fr 1fr 1fr;
+            text-align: center;
+        }
+
+            .row input {
+                border: none;
+                padding: 10px;
+                text-align: center;
+                font-size: 15px;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+        .selected-billing-row input {
+            background-color: #009999 !important;
+            color: white !important;
+        }
+
+        input:focus {
+            outline: 2px solid #007bff;
+        }
+
+        .total-box {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 90px;
+            background-color: white;
+            color: black;
+            padding: 25px 20px;
+            font-size: 22px;
+            font-weight: bold;
+            display: flex;
+            justify-content: flex-end;
+            box-sizing: border-box;
+            z-index: 9;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            width: 90%;
+            max-width: 1200px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            background-color: #009999;
+            color: white;
+            padding: 10px;
+            font-size: 18px;
+        }
+
+        .modal-row, .modal-header-row {
+            display: grid;
+            grid-template-columns: 1fr 3fr 1fr 1fr 1fr 2fr;
+            text-align: center;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .modal-row {
+            background-color: #e0f7f7;
+        }
+
+            .modal-row:hover {
+                background-color: #c9f0f0;
+                cursor: pointer;
+            }
+
+            .modal-row.selected {
+                background-color: #009999;
+                color: white;
+            }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>Counter Sale Demo</div>
+        <div>@now</div>
+    </div>
+
+    <div class="nav-row">
+        <div>Item Name</div>
+        <div>Batch</div>
+        <div>Qty</div>
+        <div>MRP</div>
+        <div>Disc %</div>
+        <div>Amount</div>
+    </div>
+
+    <div id="rowsContainer">
+        <div class="row" id="row-1">
+            <input type="text" class="item" placeholder="Enter item" />
+            <input type="text" class="batch" readonly />
+            <input type="text" class="qty" placeholder="0" />
+            <input type="text" class="mrp" placeholder="0.00" />
+            <input type="text" class="disc" placeholder="0%" />
+            <input type="text" class="amt" placeholder="0.00" readonly />
+        </div>
+    </div>
+
+    <div class="total-box">
+        Total: ₹<span id="totalAmount">0.00</span>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="stockModal">
+        <div class="modal-content">
+            <div class="modal-header">Select Item</div>
+            <div class="modal-header-row">
+                <div>Sr</div>
+                <div>Name</div>
+                <div>Batch</div>
+                <div>Qty</div>
+                <div>MRP</div>
+                <div>Expiry</div>
+            </div>
+            <div id="stockList"></div>
+        </div>
+    </div>
+
+    <script>
+        let stockData = [];
+        let selectedRowIndex = 0;
+        let modalVisible = false;
+        let activeRow = null;
+
+        window.onload = function () {
+            setupRowEvents(document.querySelector("#row-1"));
+            fetchStock();
+        };
+
+        async function fetchStock() {
+            try {
+                const res = await fetch('/Sale/GetStock');
+                if (res.ok) {
+                    stockData = await res.json();
+                }
+            } catch (e) {
+                console.warn("Stock fetch failed", e);
+            }
+        }
+
+        function setupRowEvents(row) {
+            const inputs = row.querySelectorAll("input");
+            inputs.forEach((input, index) => {
+                input.addEventListener("focus", () => {
+                    document.querySelectorAll(".row").forEach(r => r.classList.remove("selected-billing-row"));
+                    row.classList.add("selected-billing-row");
+                });
+
+                input.addEventListener("keydown", e => {
+                    if (e.key === "Enter" && input.classList.contains("item")) {
+                        activeRow = row;
+                        openModal();
+                    }
+
+                    if (e.key === "Enter" && input.classList.contains("disc")) {
+                        const qty = parseFloat(row.querySelector(".qty").value) || 0;
+                        const mrp = parseFloat(row.querySelector(".mrp").value) || 0;
+                        const disc = parseFloat(row.querySelector(".disc").value) || 0;
+                        const amt = qty * mrp * (1 - disc / 100);
+                        row.querySelector(".amt").value = amt.toFixed(2);
+                        updateTotal();
+                    }
+                });
+            });
+        }
+
+        function updateTotal() {
+            const total = [...document.querySelectorAll('.amt')].reduce((acc, el) => acc + (parseFloat(el.value) || 0), 0);
+            document.getElementById("totalAmount").textContent = total.toFixed(2);
+        }
+
+        function openModal() {
+            modalVisible = true;
+            document.getElementById("stockModal").style.display = "flex";
+            renderStockModal();
+        }
+
+        function closeModal() {
+            modalVisible = false;
+            document.getElementById("stockModal").style.display = "none";
+        }
+
+        function renderStockModal() {
+            const list = document.getElementById("stockList");
+            list.innerHTML = '';
+            stockData.forEach((m, idx) => {
+                const div = document.createElement("div");
+                div.className = "modal-row";
+                div.setAttribute("data-idx", idx);
+                div.innerHTML = `
+                    <div>${idx + 1}</div>
+                    <div>${m.name}</div>
+                    <div>${m.batchNo}</div>
+                    <div>${m.totalQuantity}</div>
+                    <div>₹${parseFloat(m.costPrice).toFixed(2)}</div>
+                    <div>${new Date(m.expiryDate).toLocaleDateString()}</div>
+                `;
+                div.onclick = () => selectFromModal(idx);
+                list.appendChild(div);
+            });
+        }
+
+        function selectFromModal(idx) {
+            const m = stockData[idx];
+            if (!activeRow) return;
+            activeRow.querySelector(".item").value = m.name;
+            activeRow.querySelector(".batch").value = m.batchNo;
+            activeRow.querySelector(".mrp").value = m.costPrice;
+            activeRow.querySelector(".qty").focus();
+            closeModal();
+        }
+    </script>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+          console.clear();
+          console.log('DOM loaded, starting fetch');
+
+          fetch('/Sale/GetStock')
+            .then(res => {
+              console.log('Fetch response status:', res.status);
+              return res.json();
+            })
+            .then(json => {
+              console.log('Fetched stock data:', json);
+            })
+            .catch(err => {
+              console.error('Fetch failed:', err);
+            });
+        });
+    </script>
+
+</body>
+</html>

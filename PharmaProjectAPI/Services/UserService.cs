@@ -77,6 +77,27 @@ namespace PharmaProjectAPI.Services
             return await db.Users.Where(u => u.Username == username).Select(u => u.Role).FirstOrDefaultAsync();
         }
 
+        public async Task<bool> UserExistsWithEmail(string email, string username, int id)
+        {
+            return await db.Users.AnyAsync(x => (x.Email == email || x.Username == username) && x.UserId == id);
+        }
+
+        public async Task UpdateUser(User user)
+        {
+            db.Update(user);
+            await db.SaveChangesAsync();
+        }
+
+        public async Task<User> GetUserByID (int id)
+        {
+            return await db.Users.FirstOrDefaultAsync(x=> x.UserId == id);
+        }
+
+        public async Task<User> GetUserByUsername(string username)
+        {
+            return await db.Users.FirstOrDefaultAsync(x => x.Username == username);
+        }
+
         public async Task<bool> SendEmailAsync(string toEmail, string subject, string body)
         {
             try
@@ -103,5 +124,7 @@ namespace PharmaProjectAPI.Services
                 return false;
             }
         }
+
+        
     }
 }

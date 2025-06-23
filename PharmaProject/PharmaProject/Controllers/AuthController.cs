@@ -10,6 +10,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using System.Net;
 
 namespace PharmaProject.Controllers
 {
@@ -69,6 +70,54 @@ namespace PharmaProject.Controllers
                 }
             }
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult EditProfile(int id)
+        {
+            UpdateProfileVM vm = new UpdateProfileVM();
+            string url = $"https://localhost:7078/api/Auth/GetUser/{id}";
+            HttpResponseMessage response = client.GetAsync(url).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<UpdateProfileVM> (json);
+                if(obj != null)
+                {
+                    vm = obj;
+                }
+            }
+            return View(vm);
+        }
+
+        [HttpPost]
+        public IActionResult EditProfile(UpdateProfileVM vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(vm);
+            }
+
+            string url = "https://localhost:7078/api/Auth/UpdateProfile";
+
+            var jsonData = JsonConvert.SerializeObject(vm);
+            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = client.PutAsync(url, content).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Optionally: TempData["Success"] = "Profile updated successfully.";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                // Optionally: Read error message from API
+                var errorMsg = response.Content.ReadAsStringAsync().Result;
+                ModelState.AddModelError("", $"Update failed: {errorMsg}");
+                return View(vm);
+            }
         }
 
         public IActionResult Login()

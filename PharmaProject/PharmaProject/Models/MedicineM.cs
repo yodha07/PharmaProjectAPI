@@ -9,12 +9,12 @@
             public float pricePerUnit { get; set; }
             public string? batchNo { get; set; }
             public DateTime expiryDate { get; set; }
-            public DateTime createdAt { get; set; }
+            public DateTime? createdAt { get; set; }
             public string createdBy { get; set; }
             public DateTime modifiedAt { get; set; }
             public string modifiedBy { get; set; }
-            public object purchaseItems { get; set; }
-            public object saleItems { get; set; }
+            public object? purchaseItems { get; set; }
+            public object? saleItems { get; set; }
         
 
     }

@@ -12,10 +12,10 @@ namespace PharmaProjectAPI.Models
         public decimal PricePerUnit { get; set; }
         public string BatchNo { get; set; }
         public DateTime ExpiryDate { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public string CreatedBy { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public string? CreatedBy { get; set; }
         public DateTime? ModifiedAt { get; set; }
-        public string ModifiedBy { get; set; }
+        public string? ModifiedBy { get; set; }
 
         public List<PurchaseCart> PurchaseCarts { get; set; }
         public List<PurchaseItem> PurchaseItems { get; set; }
