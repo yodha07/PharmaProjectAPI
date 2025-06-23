@@ -12,13 +12,8 @@ using PharmaProjectAPI.Data;
 namespace PharmaProjectAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-<<<<<<<< HEAD:PharmaProjectAPI/Migrations/20250623094708_shakil22.Designer.cs
-    [Migration("20250623094708_shakil22")]
-    partial class shakil22
-========
-    [Migration("20250623095604_jhjhhjk")]
-    partial class jhjhhjk
->>>>>>>> 4a1e8d72a6afded9f255b8b2f0dda607fcf134c9:PharmaProjectAPI/Migrations/20250623095604_jhjhhjk.Designer.cs
+    [Migration("20250623180533_lhsg")]
+    partial class lhsg
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
