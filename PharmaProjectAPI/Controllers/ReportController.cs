@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using PharmaProjectAPI.Data;
 using PharmaProjectAPI.DTO;
 using PharmaProjectAPI.Models;
+using PharmaProjectAPI.Repository;
 
 namespace PharmaProjectAPI.Controllers
 {
@@ -12,28 +13,27 @@ namespace PharmaProjectAPI.Controllers
     public class ReportController : ControllerBase
     {
         private readonly ApplicationDbContext db;
+        private readonly IReportsRepository repo;
 
-        public ReportController(ApplicationDbContext db)
+        public ReportController(ApplicationDbContext db, IReportsRepository repo)
         {
             this.db = db;
+            this.repo = repo;
         }
 
         [HttpGet]
         [Route("StockAlert")]
         public IActionResult stockAlert()
         {
-            int min = 11;
-            int lowStockCount = db.PurchaseItems
-                .Where(x => x.Quantity  <= min)
-                .Count();
-            return Ok(lowStockCount);
+            int count = repo.stockAlert();
+            return Ok(count);
         }
 
         [HttpGet]
         [Route("ExpAlert")]
         public IActionResult ExpAlert()
         {
-            int expcount = db.Medicines.Where(x => x.ExpiryDate <= DateTime.Now).Count();
+            int expcount = repo.ExpAlert();
             return Ok(expcount);
         }
 
@@ -41,8 +41,7 @@ namespace PharmaProjectAPI.Controllers
         [Route("PriorExpAlert")]
         public IActionResult PriorExpAlert()
         {
-            DateTime Days30 = DateTime.Now + TimeSpan.FromDays(30);
-            int priorexpalert = db.Medicines.Where(x => x.ExpiryDate <= Days30 && x.ExpiryDate >= DateTime.Now).Count();
+            int priorexpalert = repo.PriorExpAlert();
             return Ok(priorexpalert);
 
         }
@@ -51,17 +50,8 @@ namespace PharmaProjectAPI.Controllers
         [Route("StockAlertTable")]
         public IActionResult stockAlertTable()
         {
-            int min = 11;
-            var stockAlertTable = db.PurchaseItems.Where(x => x.Quantity <= min).Include(x => x.Medicine).Select(x => new PurchaseItemDtoSF()
-            {
-                PurchaseItemId = x.PurchaseItemId,
-                MedicineId = x.MedicineId,
-                MedicineName = x.Medicine.Name,
-                BatchNo = x.Medicine.BatchNo,
-                ExpiryDate = x.Medicine.ExpiryDate,
-                Quantity = x.Quantity,
-                CostPrice = x.CostPrice,
-            }).ToList();
+
+            var stockAlertTable = repo.stockAlertTable();
             return Ok(stockAlertTable);
         }
 
@@ -69,16 +59,7 @@ namespace PharmaProjectAPI.Controllers
         [Route("ExpAlertTable")]
         public IActionResult ExpAlertTable()
         {
-            var expAlertTable = db.PurchaseItems.Include(x => x.Medicine).Where(x => x.Medicine.ExpiryDate.Date <= DateTime.Today).Select(x => new PurchaseItemDtoSF()
-            {
-                PurchaseItemId = x.PurchaseItemId,
-                MedicineId = x.MedicineId,
-                MedicineName = x.Medicine.Name,
-                BatchNo = x.Medicine.BatchNo,
-                ExpiryDate = x.Medicine.ExpiryDate,
-                Quantity = x.Quantity,
-                CostPrice = x.CostPrice,
-            }).ToList();
+            var expAlertTable = repo.ExpAlertTable();
             return Ok(expAlertTable);
         }
 
@@ -86,16 +67,7 @@ namespace PharmaProjectAPI.Controllers
         [Route("TodaySale")]
         public IActionResult TodaySalesTable() 
         {
-            var total_sale = db.SaleItems.Include(x => x.Medicine).Where(x => x.Sale.SaleDate.Date.Equals(DateTime.Today))
-                .Select(x => new TodaySaleDto()
-                {
-                    CustomerName = x.Sale.CustomerName,
-                    SaleDate = x.Sale.SaleDate,
-                    Quantity = x.Quantity,
-                    Discount = x.Discount,
-                    TotalAmount = x.Sale.TotalAmount,
-                    MedicineName = x.Medicine.Name
-                }).ToList();
+            var total_sale = repo.TodaySalesTable();
             return Ok(total_sale);
         }
 
@@ -103,12 +75,7 @@ namespace PharmaProjectAPI.Controllers
         [Route("Top5")]
         public IActionResult Top5()
         {
-            var top_sale = db.SaleItems.Include(x => x.Sale).Include(x => x.Medicine).GroupBy(x => x.Medicine.Name).Select(y => new Top5Dto()
-            {
-                Quantity = y.Sum(x => x.Quantity),
-                MedicineName = y.Key
-
-            }).OrderByDescending(x => x.Quantity).Take(5).ToList();
+            var top_sale = repo.Top5();
             return Ok(top_sale);
         }
 
@@ -116,18 +83,7 @@ namespace PharmaProjectAPI.Controllers
         [Route("PriorExpAlertTable")]
         public IActionResult PriorExpAlertTable()
         {
-            DateTime Days30 = DateTime.Now + TimeSpan.FromDays(30);
-            //db.Medicines.Where(x => x.ExpiryDate <= Days30 && x.ExpiryDate >= DateTime.Now)
-            var priorexpalert = db.PurchaseItems.Where(x => x.Medicine.ExpiryDate <= Days30 && x.Medicine.ExpiryDate >= DateTime.Now).Include(x => x.Medicine).Select(x => new PurchaseItemDtoSF()
-            {
-                PurchaseItemId = x.PurchaseItemId,
-                MedicineId = x.MedicineId,
-                MedicineName = x.Medicine.Name,
-                BatchNo = x.Medicine.BatchNo,
-                ExpiryDate = x.Medicine.ExpiryDate,
-                Quantity = x.Quantity,
-                CostPrice = x.CostPrice,
-            }).ToList();
+            var priorexpalert = repo.PriorExpAlertTable();
             return Ok(priorexpalert);
         }
     }

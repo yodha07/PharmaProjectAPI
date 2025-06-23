@@ -321,7 +321,6 @@ namespace PharmaProjectAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CustomerName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedAt")

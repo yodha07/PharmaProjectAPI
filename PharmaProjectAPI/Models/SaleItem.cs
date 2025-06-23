@@ -30,6 +30,6 @@ namespace PharmaProjectAPI.Models
         public PurchaseItem PurchaseItem { get; set; }
 
         [ForeignKey("CustomerId")]
-        public Customer Customer{ get; set; }
+        public Customer Customer { get; set; }
     }
 }
