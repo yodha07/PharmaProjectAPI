@@ -26,6 +26,7 @@ builder.Services.AddScoped<IPurchaseRepo, PurchaseService>();
 builder.Services.AddScoped<IDashboard, DashboardService>();
 builder.Services.AddScoped<ICartRepository, CartService>();
 builder.Services.AddScoped<ITransactionRepo, TransactionService>();
+builder.Services.AddScoped<IReportsRepository, ReportService>();
 
 
 // ✅ Configure authentication only once
