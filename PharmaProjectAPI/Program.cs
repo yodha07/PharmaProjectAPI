@@ -34,6 +34,7 @@ builder.Services.AddScoped<ICartRepository, CartService >();
 builder.Services.AddScoped<ITransactionRepo, TransactionService>();
 
 builder.Services.AddScoped<IStockRepo, StockService>();
+builder.Services.AddScoped<IOSaleRepo, OSaleService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
 {

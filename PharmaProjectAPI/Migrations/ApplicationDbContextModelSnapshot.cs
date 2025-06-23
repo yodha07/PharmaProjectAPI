@@ -323,7 +323,6 @@ namespace PharmaProjectAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CustomerName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedAt")
@@ -587,7 +586,7 @@ namespace PharmaProjectAPI.Migrations
                     b.HasOne("PharmaProjectAPI.Models.Customer", "Customer")
                         .WithMany("SaleItems")
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("PharmaProjectAPI.Models.Medicine", "Medicine")

@@ -39,6 +39,13 @@ namespace PharmaProjectAPI.Mapping
             CreateMap<PurchaseItem, PurchaseItemDTO2>()
             .ForMember(dest => dest.Mname, opt => opt.MapFrom(src => src.Medicine != null ? src.Medicine.Name : ""));
 
+            CreateMap<Sale, OSaleDTO1>().ReverseMap();
+            CreateMap<Sale, OSaleDTO2>()
+            .ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src => src.Customer != null ? src.Customer.Name : ""));
+
+            CreateMap<SaleItem, OSaleItemDTO1>().ReverseMap();
+            CreateMap<SaleItem, OSaleItemDTO2>()
+            .ForMember(dest => dest.mname, opt => opt.MapFrom(src => src.Medicine != null ? src.Medicine.Name : ""));
         }
     }
 }
