@@ -50,5 +50,13 @@ namespace PharmaProjectAPI.Controllers
             med.Edit(id,edit);
             return Ok();
         }
+
+        [HttpGet]
+        [Route("stock")]
+        public IActionResult GetMedicineStock()
+        {
+            var stockList = med.GetMedicineStock();
+            return Ok(stockList);
+        }
     }
 }

@@ -30,6 +30,8 @@ builder.Services.AddScoped<IPurchaseRepo, PurchaseService>();
 
 builder.Services.AddScoped<IDashboard, DashboardService>();
 
+builder.Services.AddScoped<IStockRepo, StockService>();
+
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
 {
     options.LoginPath = "/Auth/Login";
