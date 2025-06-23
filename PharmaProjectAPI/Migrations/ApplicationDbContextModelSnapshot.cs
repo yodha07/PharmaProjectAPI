@@ -42,6 +42,9 @@ namespace PharmaProjectAPI.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("ppu")
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("CartId");
 
                     b.HasIndex("MedicineId");
@@ -587,7 +590,7 @@ namespace PharmaProjectAPI.Migrations
                     b.HasOne("PharmaProjectAPI.Models.Customer", "Customer")
                         .WithMany("SaleItems")
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("PharmaProjectAPI.Models.Medicine", "Medicine")
