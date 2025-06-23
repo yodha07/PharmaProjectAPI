@@ -7,8 +7,9 @@ namespace PharmaProjectAPI.Repository
     {
         void AddMedi(MedicineDTO m);
         void Delete(int id);
-        MedicineEdit GetMedicineId(int id);
-        void Edit(int id,MedicineEdit edit);
+        Medicine GetMedicineId(int id);
+        //void edit(Medicine m);
+        void Edit(MedicineEdit edit);
         List<Medicine> fetch();
         List<MedicineStockDto> GetMedicineStock();
     }

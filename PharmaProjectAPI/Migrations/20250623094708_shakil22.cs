@@ -5,22 +5,14 @@
 namespace PharmaProjectAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class update : Migration
+    public partial class shakil22 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "CustomerId",
-                table: "SaleItems",
-                type: "int",
-                nullable: false,
-                defaultValue: 0);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SaleItems_CustomerId",
-                table: "SaleItems",
-                column: "CustomerId");
+            migrationBuilder.DropForeignKey(
+                name: "FK_SaleItems_Customers_CustomerId",
+                table: "SaleItems");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_SaleItems_Customers_CustomerId",
@@ -28,7 +20,7 @@ namespace PharmaProjectAPI.Migrations
                 column: "CustomerId",
                 principalTable: "Customers",
                 principalColumn: "CustomerId",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Restrict);
         }
 
         /// <inheritdoc />
@@ -38,13 +30,13 @@ namespace PharmaProjectAPI.Migrations
                 name: "FK_SaleItems_Customers_CustomerId",
                 table: "SaleItems");
 
-            migrationBuilder.DropIndex(
-                name: "IX_SaleItems_CustomerId",
-                table: "SaleItems");
-
-            migrationBuilder.DropColumn(
-                name: "CustomerId",
-                table: "SaleItems");
+            migrationBuilder.AddForeignKey(
+                name: "FK_SaleItems_Customers_CustomerId",
+                table: "SaleItems",
+                column: "CustomerId",
+                principalTable: "Customers",
+                principalColumn: "CustomerId",
+                onDelete: ReferentialAction.Cascade);
         }
     }
 }

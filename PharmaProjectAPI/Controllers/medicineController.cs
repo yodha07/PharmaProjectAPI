@@ -45,9 +45,16 @@ namespace PharmaProjectAPI.Controllers
         }
         [HttpPut]
         [Route("Edit")]
-        public IActionResult EditMedicine(int id, MedicineEdit edit)
+        //public IActionResult edit(Medicine m)
+        //{
+        //    med.edit(m);
+        //    return RedirectToAction("Index");
+        //}
+        [HttpPut]
+  
+        public IActionResult EditMedicine(MedicineEdit edit)
         {
-            med.Edit(id,edit);
+            med.Edit(edit);
             return Ok();
         }
 

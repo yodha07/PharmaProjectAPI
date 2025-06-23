@@ -146,11 +146,10 @@ namespace PharmaProjectAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ExpiryDate")
@@ -164,7 +163,6 @@ namespace PharmaProjectAPI.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -587,7 +585,7 @@ namespace PharmaProjectAPI.Migrations
                     b.HasOne("PharmaProjectAPI.Models.Customer", "Customer")
                         .WithMany("SaleItems")
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("PharmaProjectAPI.Models.Medicine", "Medicine")

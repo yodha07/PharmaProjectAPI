@@ -12,8 +12,8 @@ using PharmaProjectAPI.Data;
 namespace PharmaProjectAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250621104223_addddd")]
-    partial class addddd
+    [Migration("20250623094708_shakil22")]
+    partial class shakil22
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -85,7 +85,6 @@ namespace PharmaProjectAPI.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -150,11 +149,10 @@ namespace PharmaProjectAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ExpiryDate")
@@ -168,7 +166,6 @@ namespace PharmaProjectAPI.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -222,6 +219,48 @@ namespace PharmaProjectAPI.Migrations
                     b.HasIndex("SupplierId");
 
                     b.ToTable("Purchases");
+                });
+
+            modelBuilder.Entity("PharmaProjectAPI.Models.PurchaseCart", b =>
+                {
+                    b.Property<int>("CartId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartId"));
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MedicineId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Ppu")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SupplierId")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.HasKey("CartId");
+
+                    b.HasIndex("MedicineId");
+
+                    b.HasIndex("SupplierId");
+
+                    b.ToTable("PurchaseCarts");
                 });
 
             modelBuilder.Entity("PharmaProjectAPI.Models.PurchaseItem", b =>
@@ -292,7 +331,6 @@ namespace PharmaProjectAPI.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("SaleDate")
@@ -337,7 +375,6 @@ namespace PharmaProjectAPI.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PurchaseItemId")
@@ -497,6 +534,25 @@ namespace PharmaProjectAPI.Migrations
                     b.Navigation("Supplier");
                 });
 
+            modelBuilder.Entity("PharmaProjectAPI.Models.PurchaseCart", b =>
+                {
+                    b.HasOne("PharmaProjectAPI.Models.Medicine", "Medicine")
+                        .WithMany("PurchaseCarts")
+                        .HasForeignKey("MedicineId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("PharmaProjectAPI.Models.Supplier", "Supplier")
+                        .WithMany("PurchaseCarts")
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Medicine");
+
+                    b.Navigation("Supplier");
+                });
+
             modelBuilder.Entity("PharmaProjectAPI.Models.PurchaseItem", b =>
                 {
                     b.HasOne("PharmaProjectAPI.Models.Medicine", "Medicine")
@@ -532,7 +588,7 @@ namespace PharmaProjectAPI.Migrations
                     b.HasOne("PharmaProjectAPI.Models.Customer", "Customer")
                         .WithMany("SaleItems")
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("PharmaProjectAPI.Models.Medicine", "Medicine")
@@ -584,6 +640,8 @@ namespace PharmaProjectAPI.Migrations
                 {
                     b.Navigation("Carts");
 
+                    b.Navigation("PurchaseCarts");
+
                     b.Navigation("PurchaseItems");
 
                     b.Navigation("SaleItems");
@@ -608,6 +666,8 @@ namespace PharmaProjectAPI.Migrations
 
             modelBuilder.Entity("PharmaProjectAPI.Models.Supplier", b =>
                 {
+                    b.Navigation("PurchaseCarts");
+
                     b.Navigation("Purchases");
                 });
 

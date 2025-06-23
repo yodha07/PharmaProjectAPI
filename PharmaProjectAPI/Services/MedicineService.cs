@@ -44,10 +44,16 @@ namespace PharmaProjectAPI.Services
                 db.SaveChanges();
             }
         }
-        public MedicineEdit GetMedicineId(int id)
+        public List<Medicine> fetch()
+        {
+            return db.Medicines.ToList();
+
+
+        }
+        public Medicine GetMedicineId(int id)
         {
          var y= db.Medicines.Find(id);
-           return new MedicineEdit
+           return new Medicine
             {
                MedicineId=y.MedicineId,
                Name=y.Name,
@@ -63,38 +69,50 @@ namespace PharmaProjectAPI.Services
 
             };
         }
-        public List<Medicine> fetch()
+        //public void edit(Medicine m)
+        //{
+        //    db.Medicines.Update(m);
+        //    db.SaveChanges();
+        //}
+ 
+        public void Edit(MedicineEdit edit)
         {
-          return db.Medicines.ToList();
-       
-            
-        }
-        public void Edit(int id,MedicineEdit edit)
-        {
-            if(edit==null)
+            var medicine = new Medicine
             {
-                throw new Exception("edit null");
-            }
-            var f=db.Medicines.Find(id);
+                MedicineId=edit.MedicineId,
+                Name=edit.Name,
+                Category=edit.Category,
+                Manufacturer=edit.Manufacturer,
+                PricePerUnit=edit.PricePerUnit,
+                BatchNo=edit.BatchNo,
+                ExpiryDate=edit.ExpiryDate,
+                ModifiedAt=edit.ModifiedAt,
+                ModifiedBy=edit.ModifiedBy
+            };
+            //if(edit==null)
+            //{
+            //    throw new Exception("edit null");
+            //}
+            //var f=db.Medicines.Find(id);
 
-            if (f == null)
-            {
-                throw new Exception("medi no found");
-            }
+            //if (f == null)
+            //{
+            //    throw new Exception("medi no found");
+            //}
                 //f.MedicineId = edit.MedicineId;
-                f.Name = edit.Name;
-                f.Category = edit.Category;
-                f.Manufacturer = edit.Manufacturer;
-                f.PricePerUnit = edit.PricePerUnit;
-                f.BatchNo = edit.BatchNo;
-                f.ExpiryDate = edit.ExpiryDate;
-                f.CreatedAt = edit.CreatedAt;
-                f.CreatedBy = edit.CreatedBy;
-                f.ModifiedAt = edit.ModifiedAt;
-                f.ModifiedBy = edit.ModifiedBy;
+                //f.Name = edit.Name;
+                //f.Category = edit.Category;
+                //f.Manufacturer = edit.Manufacturer;
+                //f.PricePerUnit = edit.PricePerUnit;
+                //f.BatchNo = edit.BatchNo;
+                //f.ExpiryDate = edit.ExpiryDate;
+                //f.CreatedAt = edit.CreatedAt;
+                //f.CreatedBy = edit.CreatedBy;
+                //f.ModifiedAt = edit.ModifiedAt;
+                //f.ModifiedBy = edit.ModifiedBy;
             
       
-            db.Medicines.Update(f);
+            db.Medicines.Update(medicine);
             db.SaveChanges();
         }
         public List<MedicineStockDto> GetMedicineStock()
