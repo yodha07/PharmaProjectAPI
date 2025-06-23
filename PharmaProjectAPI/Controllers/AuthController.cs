@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using PharmaProjectAPI.Data;
 using PharmaProjectAPI.DTO;
 using PharmaProjectAPI.Models;
@@ -62,17 +64,87 @@ namespace PharmaProjectAPI.Controllers
                 return BadRequest(res);
             }
 
-            var role = repo.GetUserRole(login.Username);
+            
+
+            var user = await repo.GetUserByUsername(login.Username);
+            if (user == null)
+            {
+                return Unauthorized("User not found");
+            }
+
+            var role = await repo.GetUserRole(login.Username);
 
             var claims = new List<Claim>
             {
+                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
                 new Claim(ClaimTypes.Name, login.Username),
-                new Claim(ClaimTypes.Role, await role) 
+                new Claim(ClaimTypes.Role, role) 
             };
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
             return Ok("Login successful");
+        }
+
+        //[HttpPut]
+        //[Route ("UpdateProfile")]
+        //public async Task<IActionResult> UpdateProfile(UpdateProfileDTO upd)
+        //{
+        //    var username = User.Identity?.Name;
+        //    if(username == null)
+        //    {
+        //        return Unauthorized("User not found");
+        //    }
+
+        //    var getUser = await repo.GetUserByUsername(username);
+        //    if(getUser == null)
+        //    {
+        //        return Unauthorized("User not found");
+        //    }
+
+        //    var exists = repo.UserExistsWithEmail(upd.UserName, upd.Email, getUser.UserId);
+        //    if (await exists)
+        //    {
+        //        return BadRequest("Email or username already in use");
+        //    }
+
+        //    getUser.Username = upd.UserName;
+        //    getUser.Email = upd.Email;
+        //    getUser.Role = upd.Role;
+
+        //    await repo.UpdateUser(getUser);
+
+        //    return Ok("updated");
+
+        //}
+
+        [HttpGet]
+        [Route("GetUser/{id}")]
+        public async Task<IActionResult> GetUser(int id)
+        {
+            var user = await repo.GetUserByID(id);
+            if (user == null) return NotFound();
+
+            var dto = mapper.Map<UpdateProfileDTO>(user);
+            return Ok(dto);
+        }
+
+        [HttpPut]
+        [Route("UpdateProfile")]
+        public async Task<IActionResult> UpdateProfile(UpdateProfileDTO upd)
+        {
+            var user = await repo.GetUserByID(upd.UserID);
+            if (user == null) return NotFound();
+
+            var exists = await repo.UserExistsWithEmail(user.Email, user.Username, user.UserId);
+            if (!exists) return NotFound();
+
+            user.Email = upd.Email;
+            user.Username = upd.UserName;
+            user.Role = upd.Role;
+
+            await repo.UpdateUser(user);
+            return Ok("Updated");
         }
 
         [HttpGet]
