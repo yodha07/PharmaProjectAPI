@@ -15,18 +15,18 @@ namespace PharmaProjectAPI.Services
             this.db = db;
         }
 
-        public void AddCustomer(CustomerDTO customer)
+        public void AddCustomer(CustomerDTO2 customer)
         {
             var data = new Customer()
             {
-               
                 Name = customer.Name,
+                Address = customer.Address,
                 EmailId = customer.EmailId,
                 Mobile=customer.Mobile,
-                CreatedAt = DateTime.Now,
-                CreatedBy="Cashier",
-                ModifiedAt= DateTime.Now,
-                ModifiedBy="Cashier"
+                CreatedAt = customer.CreatedAt,
+                CreatedBy= customer.CreatedBy
+                //ModifiedAt= DateTime.Now
+                //ModifiedBy="Cashier"
             };
             db.Customers.Add(data);
             db.SaveChanges();
@@ -51,26 +51,53 @@ namespace PharmaProjectAPI.Services
              }
             db.SaveChanges();
         }
-        public Customer GetCustomerById(int id)
+        public CustomerDTO3 GetCustomerById(int id)
         {
-            return db.Customers.Find(id);
-          
-        }
-        public void UpdateCustomer(CustomerDTO customer)
-        {
-            var data = new Customer()
+            var customer= db.Customers.Find(id);
+            var data = new CustomerDTO3()
             {
-                CustomerId = customer.CustomerId,
+                CustomerId=customer.CustomerId,
                 Name = customer.Name,
+                Address = customer.Address,
                 EmailId = customer.EmailId,
                 Mobile = customer.Mobile,
-                CreatedAt = DateTime.Now,
-                CreatedBy = "Cashier",
-                ModifiedAt = DateTime.Now,
-                ModifiedBy = "Cashier"
+                ModifiedAt = customer.ModifiedAt,
+                ModifiedBy = customer.ModifiedBy
+                //ModifiedAt= DateTime.Now
+                //ModifiedBy="Cashier"
             };
-            db.Customers.Update(data);
-            db.SaveChanges();
+            return data;
+        }
+        public void UpdateCustomer(CustomerDTO3 customer)
+        {
+            var existing = db.Customers.FirstOrDefault(x => x.CustomerId == customer.CustomerId);
+            if (existing != null)
+            {
+                existing.Name = customer.Name;
+                existing.EmailId = customer.EmailId;
+                existing.Address = customer.Address;
+                existing.Mobile= customer.Mobile;
+                existing.ModifiedAt = customer.ModifiedAt;
+                existing.ModifiedBy = customer.ModifiedBy;
+
+                db.SaveChanges();
+            }
+
+
+            //var data = new Customer()
+            //{
+            //    CustomerId = customer.CustomerId,
+            //    Name = customer.Name,
+            //    EmailId = customer.EmailId,
+            //    Address= customer.Address,
+            //    Mobile = customer.Mobile,
+            //    //CreatedAt = DateTime.Now,
+            //    //CreatedBy = "Cashier",
+            //    ModifiedAt = DateTime.Now,
+            //    ModifiedBy = "Cashier"
+            //};
+            //db.Customers.Update(data);
+            //db.SaveChanges();
         }
 
         public List<Customer> GetAll()

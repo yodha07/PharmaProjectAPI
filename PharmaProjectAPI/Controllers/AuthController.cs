@@ -40,7 +40,7 @@ namespace PharmaProjectAPI.Controllers
 
             string pass = BCrypt.Net.BCrypt.HashPassword(reg.PasswordHash);
             var user = mapper.Map<User>(reg);
-            user.Role = "User";
+            user.Role = "Admin";
             user.PasswordHash = pass;
             user.CreatedDate = DateTime.Now;
 

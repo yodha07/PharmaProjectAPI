@@ -8,7 +8,6 @@ let grandTotal = 0;
 $('#paybtn').click(function (e) {
     e.preventDefault();
 
-    // 1. Fetch Cart Items First
     $.ajax({
         url: '/Purchase/GetCart',
         type: 'GET',
@@ -30,7 +29,7 @@ $('#paybtn').click(function (e) {
             let sgst = grandTotal * 0.05;
             let finalTotal = grandTotal + cgst + sgst;
 
-            let amountInPaise = Math.round(finalTotal * 100); // Razorpay needs in paisa
+            let amountInPaise = Math.round(finalTotal * 100);
 
             const razorOptions = {
                 "key": "rzp_test_Kl7588Yie2yJTV",
@@ -38,78 +37,99 @@ $('#paybtn').click(function (e) {
                 "currency": "INR",
                 "name": "Pharma",
                 "description": "Supplier Payment",
-                "handler": function (response) {
+                handler: function (response) {
                     alert("✅ Payment Successful!");
 
-                    // --- 1. Add Purchase ---
                     let invoiceNo = "INV-" + new Date().getTime();
-                    let purchaseData = {
-                        SupplierId: cartData[0].supplierId,
-                        PurchaseDate: new Date().toISOString(),
-                        InvoiceNo: invoiceNo,
-                        TotalAmount: finalTotal,
-                    };
 
                     $.ajax({
-                        url: '/Purchase/AddPurchase',
+                        url: '/Purchase/GeneratePurchaseInvoicePdf',
                         type: 'POST',
-                        dataType: 'json',
-                        contentType: 'Application/x-www-form-urlencoded;charset=utf-8',
-                        data: purchaseData,
-                        success: function (res1) {
-                            if (res1.success) {
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            cartItems: cartData,
+                            total: grandTotal,
+                            invoiceNo: invoiceNo
+                        }),
+                        success: function (pdfRes) {
+                            if (pdfRes.success) {
+                                let invoicePath = pdfRes.path;
 
-                                // --- 2. Add Each Item to PurchaseItem ---
-                                let successCount = 0;
-                                $.each(cartData, function (i, item) {
-                                    let itemData = {
-                                        MedicineId: item.medicineId,
-                                        Quantity: item.quantity,
-                                        CostPrice: parseFloat((item.ppu * 1.05).toFixed(2)),
-                                    };
+                                let purchaseData = {
+                                    SupplierId: cartData[0].supplierId,
+                                    PurchaseDate: new Date().toISOString(),
+                                    InvoiceNo: invoicePath, 
+                                    TotalAmount: finalTotal,
+                                };
 
-                                    $.ajax({
-                                        url: '/Purchase/AddPurchaseItem',
-                                        type: 'POST',
-                                        dataType: 'json',
-                                        contentType: 'Application/x-www-form-urlencoded;charset=utf-8',
-                                        data: itemData,
-                                        success: function (res2) {
-                                            if (res2.success) {
-                                                successCount++;
-                                                if (successCount === cartData.length) {
-                                                    // --- 3. Delete Cart After All Items Added ---
-                                                    const cartIds = cartData.map(x => x.cartId);
-                                                    $.ajax({
-                                                        url: '/Purchase/DeleteCart',
-                                                        type: 'POST',
-                                                        traditional: true, // important for list
-                                                        data: { ids: cartIds },
-                                                        success: function (res3) {
-                                                            if (res3.success) {
-                                                                alert("🎉 Purchase completed and cart cleared!");
-                                                                window.location.reload();
-                                                            } else {
-                                                                alert("Purchase done but cart could not be cleared.");
+                                $.ajax({
+                                    url: '/Purchase/AddPurchase',
+                                    type: 'POST',
+                                    dataType: 'json',
+                                    contentType: 'application/x-www-form-urlencoded;charset=utf-8',
+                                    data: purchaseData,
+                                    success: function (res1) {
+                                        if (res1.success) {
+
+                                            let successCount = 0;
+                                            $.each(cartData, function (i, item) {
+                                                let itemData = {
+                                                    MedicineId: item.medicineId,
+                                                    Quantity: item.quantity,
+                                                    CostPrice: parseFloat((item.ppu * 1.5).toFixed(2)),
+                                                };
+
+                                                $.ajax({
+                                                    url: '/Purchase/AddPurchaseItem',
+                                                    type: 'POST',
+                                                    dataType: 'json',
+                                                    contentType: 'application/x-www-form-urlencoded;charset=utf-8',
+                                                    data: itemData,
+                                                    success: function (res2) {
+                                                        if (res2.success) {
+                                                            successCount++;
+                                                            if (successCount === cartData.length) {
+
+                                                                const cartIds = cartData.map(x => x.cartId);
+                                                                $.ajax({
+                                                                    url: '/Purchase/DeleteCart',
+                                                                    type: 'POST',
+                                                                    traditional: true,
+                                                                    data: { ids: cartIds },
+                                                                    success: function (res3) {
+                                                                        if (res3.success) {
+                                                                            alert("🎉 Purchase and Invoice saved!");
+                                                                            window.location.href = invoicePath;
+                                                                        } else {
+                                                                            alert("Purchase done but cart couldn't be cleared.");
+                                                                        }
+                                                                    },
+                                                                    error: function () {
+                                                                        alert("Error deleting cart.");
+                                                                    }
+                                                                });
                                                             }
-                                                        },
-                                                        error: function () {
-                                                            alert("Error deleting cart.");
+                                                        } else {
+                                                            alert("Error adding purchase item.");
                                                         }
-                                                    });
-                                                }
-                                            } else {
-                                                alert("Error adding PurchaseItem.");
-                                            }
+                                                    }
+                                                });
+                                            });
+                                        } else {
+                                            alert("Error saving purchase.");
                                         }
-                                    });
+                                    },
+                                    error: function () {
+                                        alert("Failed to add purchase.");
+                                    }
                                 });
+
                             } else {
-                                alert("Error saving purchase.");
+                                alert("❌ Failed to generate invoice PDF.");
                             }
                         },
                         error: function () {
-                            alert("Failed to add purchase.");
+                            alert("❌ Error in PDF generation request.");
                         }
                     });
                 },

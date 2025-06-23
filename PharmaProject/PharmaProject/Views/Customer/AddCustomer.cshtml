@@ -1,4 +1,4 @@
-﻿@model PharmaProject.Models.CustomerDTO
+﻿@model PharmaProject.Models.CustomerDTO2
 
 @{
     ViewData["Title"] = "AddCustomer";
@@ -6,7 +6,7 @@
 
 <h1>AddCustomer</h1>
 
-<h4>CustomerDTO</h4>
+
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -29,24 +29,9 @@
                 <span asp-validation-for="EmailId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CreatedAt" class="control-label"></label>
-                <input asp-for="CreatedAt" class="form-control" />
-                <span asp-validation-for="CreatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedBy" class="control-label"></label>
-                <input asp-for="CreatedBy" class="form-control" />
-                <span asp-validation-for="CreatedBy" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ModifiedAt" class="control-label"></label>
-                <input asp-for="ModifiedAt" class="form-control" />
-                <span asp-validation-for="ModifiedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ModifiedBy" class="control-label"></label>
-                <input asp-for="ModifiedBy" class="form-control" />
-                <span asp-validation-for="ModifiedBy" class="text-danger"></span>
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
