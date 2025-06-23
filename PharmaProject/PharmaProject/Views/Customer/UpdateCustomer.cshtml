@@ -1,4 +1,4 @@
-﻿@model PharmaProject.Models.CustomerDTO
+﻿@model PharmaProject.Models.CustomerDTO3
 
 @{
     ViewData["Title"] = "UpdateCustomer";
@@ -10,13 +10,9 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="UpdateCustomer">
+        <form asp-action="UpdatedCustomer" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label readonly asp-for="CustomerId" class="control-label"></label>
-                <input readonly asp-for="CustomerId" class="form-control" />
-                <span asp-validation-for="CustomerId" class="text-danger"></span>
-            </div>
+                <input readonly asp-for="CustomerId" class="form-control" type="hidden" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -32,7 +28,11 @@
                 <input asp-for="EmailId" class="form-control" />
                 <span asp-validation-for="EmailId" class="text-danger"></span>
             </div>
-          
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

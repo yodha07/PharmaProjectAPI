@@ -13,7 +13,7 @@ namespace PharmaProjectAPI.Models
         public DateTime CreatedAt { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? ModifiedAt { get; set; }
-        public string ModifiedBy { get; set; }
+        public string? ModifiedBy { get; set; }
         public List<Sale> Sales { get; set; }
         public List<SaleItem> SaleItems { get; set; }
     }

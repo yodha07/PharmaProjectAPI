@@ -1,0 +1,243 @@
+﻿@model PharmaProject.Models.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Pharma Dashboard";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="container py-4">
+    <h2 class="mb-4 text-primary fw-bold">Pharma Reports Dashboard</h2>
+
+@if (ViewBag.Error != null)
+{
+        <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card text-white bg-warning shadow rounded-4">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Stock Alert</h5>
+                    <p class="display-6 fw-semibold">@Model?.StockAlertCount</p>
+                    <small>items below stock threshold</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-white bg-danger shadow rounded-4">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Expiry Alert</h5>
+                    <p class="display-6 fw-semibold">@Model?.ExpAlertCount</p>
+                    <small>Expired Items</small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card text-white bg-secondary shadow rounded-4">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Prior Expiry Alert</h5>
+                    <p class="display-6 fw-semibold">@Model?.PriorExpAlertCount</p>
+                    <small>items expiring soon</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-5">
+        <h4 class="mb-3 text-secondary">Stock Alert Details</h4>
+
+        @if (Model?.StockAlertTable != null && Model.StockAlertTable.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered align-middle shadow-sm">
+                    <thead class="table-light">
+                        <tr>
+                            <th>PurchaseItem Id</th>
+                            <th>Medicine Id</th>
+                            <th>Medicine Name</th>
+                            <th>Batch No</th>
+                            <th>Expiry Date</th>
+                            <th>Quantity</th>
+                            <th>Cost Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var stock in Model.StockAlertTable)
+                        {
+                            <tr>
+                                <td>@stock.PurchaseItemId</td>
+                                <td>@stock.MedicineId</td>
+                                <td>@stock.MedicineName</td>
+                                <td>@stock.BatchNo</td>
+                                <td>@stock.ExpiryDate</td>
+                                <td>@stock.Quantity</td>
+                                <td>@stock.CostPrice</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p class="text-muted">No Stock Alert's</p>
+        }
+    </div>
+
+    <div class="mb-5">
+        <h4 class="mb-3 text-secondary">Expiry Medicine Details</h4>
+
+        @if (Model?.ExpAlertTable != null && Model.ExpAlertTable.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered align-middle shadow-sm">
+                    <thead class="table-light">
+                        <tr>
+                            <th>PurchaseItem Id</th>
+                            <th>Medicine Id</th>
+                            <th>Medicine Name</th>
+                            <th>Batch No</th>
+                            <th>Expiry Date</th>
+                            <th>Quantity</th>
+                            <th>Cost Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.ExpAlertTable)
+                        {
+                            <tr>
+                                <td>@item.PurchaseItemId</td>
+                                <td>@item.MedicineId</td>
+                                <td>@item.MedicineName</td>
+                                <td>@item.BatchNo</td>
+                                <td>@item.ExpiryDate</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.CostPrice</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p class="text-muted">No Expiry Medicine.</p>
+        }
+    </div> 
+
+    <div class="mb-5">
+        <h4 class="mb-3 text-secondary">Prior Expiry Medicine Details</h4>
+
+        @if (Model?.PriorExpAlertTable != null && Model.PriorExpAlertTable.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered align-middle shadow-sm">
+                    <thead class="table-light">
+                        <tr>
+                            <th>PurchaseItem Id</th>
+                            <th>Medicine Id</th>
+                            <th>Medicine Name</th>
+                            <th>Batch No</th>
+                            <th>Expiry Date</th>
+                            <th>Quantity</th>
+                            <th>Cost Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.PriorExpAlertTable)
+                        {
+                            <tr>
+                                <td>@item.PurchaseItemId</td>
+                                <td>@item.MedicineId</td>
+                                <td>@item.MedicineName</td>
+                                <td>@item.BatchNo</td>
+                                <td>@item.ExpiryDate</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.CostPrice</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p class="text-muted">No Prior Expiry Medicine.</p>
+        }
+    </div>
+
+    <div class="mb-5">
+        <h4 class="mb-3 text-secondary">Today's Sale</h4>
+
+        @if (Model?.TodaySales != null && Model.TodaySales.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered align-middle shadow-sm">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Customer Name</th>
+                            <th>Sale Date</th>
+                            <th>Quantity</th>
+                            <th>Discount</th>
+                            <th>Total Amount</th>
+                            <th>Medicine Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.TodaySales)
+                        {
+                            <tr>
+                                <td>@item.CustomerName</td>
+                                <td>@item.SaleDate</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.Discount</td>
+                                <td>@item.TotalAmount</td>
+                                <td>@item.MedicineName</td>
+                                
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p class="text-muted">No Sales Today.</p>
+        }
+    </div>
+
+    <div class="mb-5">
+        <h4 class="mb-3 text-secondary">Top 5</h4>
+
+        @if (Model?.Top5 != null && Model.Top5.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered align-middle shadow-sm">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Quantity</th>
+                            <th>Medicine Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Top5)
+                        {
+                            <tr>
+                                <td>@item.Quantity</td>
+                                <td>@item.MedicineName</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p class="text-muted">No Sales Today.</p>
+        }
+    </div>
+</div>

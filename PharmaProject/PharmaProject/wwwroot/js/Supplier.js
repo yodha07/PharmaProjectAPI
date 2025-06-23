@@ -1,13 +1,9 @@
 ﻿$(document).ready(function () {
-    $('#supTable').DataTable({
-        pageLength: 5,
-        lengthMenu: [5, 10, 25, 50],
-        columnDefs: [{ targets: -1, orderable: false }]
-    });
+    
     FetchSupp();     
-    setTimeout(function () {
-        $('#supTable').DataTable();
-    }, 500);
+    //setTimeout(function () {
+    //    $('#supTable').DataTable();
+    //}, 500);
 });
 
 function FetchSupp() {
@@ -43,7 +39,11 @@ function FetchSupp() {
                         </tr>`;
             });
             $('#supTable tbody').html(rows);
-            $('#supTable').DataTable();
+            $('#supTable').DataTable({
+                pageLength: 5,
+                lengthMenu: [5, 10, 25, 50],
+                columnDefs: [{ targets: -1, orderable: false }]
+            });
 
         },
         error: function () {
