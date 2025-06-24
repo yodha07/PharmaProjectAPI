@@ -45,6 +45,33 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     });
 
 // ✅ CORS policy - fixed location
+
+
+
+// ✅ Configure authentication only once
+//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+//    .AddCookie(options =>
+//    {
+//        options.LoginPath = "/Auth/Login";
+//        options.AccessDeniedPath = "/Auth/AccessDenied";
+//        options.Cookie.SameSite = SameSiteMode.None; // required for cross-origin
+//        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+//    });
+
+//builder.Services.AddCors(options =>
+
+//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+//{
+//    options.AddPolicy("AllowFrontend", policy =>
+//    {
+//        policy.WithOrigins("https://localhost:7055") // consuming app
+//              .AllowAnyHeader()
+//              .AllowAnyMethod()
+//              .AllowCredentials();
+//    });
+//});
+// 1. Add CORS Policy
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
@@ -52,9 +79,19 @@ builder.Services.AddCors(options =>
         policy.WithOrigins("https://localhost:7055") // your consuming app
               .AllowAnyHeader()
               .AllowAnyMethod()
-              .AllowCredentials();
+              .AllowCredentials(); // required for cookies
     });
 });
+
+// 2. Add Cookie Authentication
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Auth/Login";
+        options.AccessDeniedPath = "/Auth/AccessDenied";
+        options.Cookie.SameSite = SameSiteMode.None; // 🔐 Required for cross-site cookies
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // 🔐 Force HTTPS for cookies
+    });
 
 builder.Services.AddAuthorization();
 
