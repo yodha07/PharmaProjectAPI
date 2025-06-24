@@ -48,14 +48,14 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 
 
-// ✅ Configure authentication only once
+ //✅ Configure authentication only once
 //builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 //    .AddCookie(options =>
 //    {
 //        options.LoginPath = "/Auth/Login";
-//        options.AccessDeniedPath = "/Auth/AccessDenied";
-//        options.Cookie.SameSite = SameSiteMode.None; // required for cross-origin
-//        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+//options.AccessDeniedPath = "/Auth/AccessDenied";
+//options.Cookie.SameSite = SameSiteMode.None; // required for cross-origin
+//options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 //    });
 
 //builder.Services.AddCors(options =>
@@ -83,14 +83,14 @@ builder.Services.AddCors(options =>
     });
 });
 
-// 2. Add Cookie Authentication
+//2.Add Cookie Authentication
 //builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 //    .AddCookie(options =>
 //    {
 //        options.LoginPath = "/Auth/Login";
-//        options.AccessDeniedPath = "/Auth/AccessDenied";
-//        options.Cookie.SameSite = SameSiteMode.None; // 🔐 Required for cross-site cookies
-//        options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // 🔐 Force HTTPS for cookies
+//options.AccessDeniedPath = "/Auth/AccessDenied";
+//options.Cookie.SameSite = SameSiteMode.None; // 🔐 Required for cross-site cookies
+//options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // 🔐 Force HTTPS for cookies
 //    });
 
 builder.Services.AddAuthorization();
