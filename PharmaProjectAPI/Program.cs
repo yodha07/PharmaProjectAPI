@@ -84,14 +84,14 @@ builder.Services.AddCors(options =>
 });
 
 // 2. Add Cookie Authentication
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-        options.LoginPath = "/Auth/Login";
-        options.AccessDeniedPath = "/Auth/AccessDenied";
-        options.Cookie.SameSite = SameSiteMode.None; // 🔐 Required for cross-site cookies
-        options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // 🔐 Force HTTPS for cookies
-    });
+//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+//    .AddCookie(options =>
+//    {
+//        options.LoginPath = "/Auth/Login";
+//        options.AccessDeniedPath = "/Auth/AccessDenied";
+//        options.Cookie.SameSite = SameSiteMode.None; // 🔐 Required for cross-site cookies
+//        options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // 🔐 Force HTTPS for cookies
+//    });
 
 builder.Services.AddAuthorization();
 

@@ -12,8 +12,8 @@ using PharmaProjectAPI.Data;
 namespace PharmaProjectAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250624072606_kakak")]
-    partial class kakak
+    [Migration("20250624081720_lll")]
+    partial class lll
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,6 +44,9 @@ namespace PharmaProjectAPI.Migrations
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("ppu")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("CartId");
 

@@ -87,8 +87,6 @@ namespace PharmaProjectAPI.Data
             //SaleItem-Customer
             modelBuilder.Entity<SaleItem>()
                 .HasOne(s => s.Customer)
-
-                .WithMany(m => m.SaleItems);
                 .WithMany(m => m.SaleItems)
                 .HasForeignKey(s => s.CustomerId)
                 .OnDelete(DeleteBehavior.Restrict);
