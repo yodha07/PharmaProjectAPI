@@ -38,5 +38,28 @@ namespace PharmaProjectAPI.Services
                     Quantity= c.Quantity,
                 }).ToList();
         }
+
+        public List<MedicineCardDTO> GetAllAvailableMedicineCards()
+        {
+            var medicineIds = db.PurchaseItems
+                .Select(p => p.MedicineId)
+                .Distinct()
+                .ToList();
+
+            var medicines = db.Medicines
+                .Where(m => medicineIds.Contains(m.MedicineId))
+                .Select(m => new MedicineCardDTO
+                {
+                    MedicineId = m.MedicineId,
+                    Name = m.Name,
+                    Category = m.Category,
+                    Manufacturer = m.Manufacturer,
+                    PricePerUnit = m.PricePerUnit,
+                    BatchNo = m.BatchNo,
+                    ExpiryDate = m.ExpiryDate
+                }).ToList();
+
+            return medicines;
+        }
     }
 }

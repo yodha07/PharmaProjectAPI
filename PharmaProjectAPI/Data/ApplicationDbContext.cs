@@ -81,13 +81,13 @@ namespace PharmaProjectAPI.Data
             modelBuilder.Entity<SaleItem>()
                 .HasOne(si => si.Customer)
                 .WithMany(c => c.SaleItems)
-                .HasForeignKey(si => si.CustomerId)
+                .HasForeignKey(si => si.CustomerId);
 
 
             //SaleItem-Customer
             modelBuilder.Entity<SaleItem>()
                 .HasOne(s => s.Customer)
-                .WithMany(m => m.SaleItems)
+                .WithMany(m => m.SaleItems);
 
             // SaleItem - Customer
             modelBuilder.Entity<SaleItem>()

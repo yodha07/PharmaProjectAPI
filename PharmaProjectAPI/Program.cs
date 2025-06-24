@@ -15,9 +15,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Mail config
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<MailSettings>>().Value);
 
+// Repositories & Services
 builder.Services.AddScoped<IUserRepo, UserService>();
 builder.Services.AddScoped<ICustomerRepo, CustomerService>();
 builder.Services.AddScoped<ISupplierRepo, SupplierService>();
@@ -27,29 +29,27 @@ builder.Services.AddScoped<IDashboard, DashboardService>();
 builder.Services.AddScoped<ICartRepository, CartService>();
 builder.Services.AddScoped<ITransactionRepo, TransactionService>();
 builder.Services.AddScoped<IReportsRepository, ReportService>();
+builder.Services.AddScoped<IStockRepo, StockService>();
+builder.Services.AddScoped<IOSaleRepo, OSaleService>();
+builder.Services.AddScoped<IExpenseRepo, ExpenseService>();
 
 
-// ✅ Configure authentication only once
+// Authentication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
         options.LoginPath = "/Auth/Login";
         options.AccessDeniedPath = "/Auth/AccessDenied";
-        options.Cookie.SameSite = SameSiteMode.None; // required for cross-origin
+        options.Cookie.SameSite = SameSiteMode.None;
         options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     });
 
+// ✅ CORS policy - fixed location
 builder.Services.AddCors(options =>
-
-builder.Services.AddScoped<IStockRepo, StockService>();
-builder.Services.AddScoped<IOSaleRepo, OSaleService>();
-
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
-
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("https://localhost:7055") // consuming app
+        policy.WithOrigins("https://localhost:7055") // your consuming app
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
@@ -65,17 +65,17 @@ builder.Services.AddAutoMapper(typeof(MappingData));
 
 var app = builder.Build();
 
-// Configure the middleware pipeline
+// Middleware pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseCors("AllowFrontend"); // 🔥 Needed for cross-origin
+app.UseCors("AllowFrontend");
 app.UseHttpsRedirection();
 
-app.UseAuthentication(); // 🛡️ Required for [Authorize]
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
