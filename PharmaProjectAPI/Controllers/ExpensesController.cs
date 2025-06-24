@@ -18,7 +18,8 @@ namespace PharmaProjectAPI.Controllers
             this.repo = repo;
         }
 
-        [HttpPost("add")]
+        [HttpPost]
+        [Route(("add"))]
         public IActionResult AddExpense( ExpenseDTO dto)
         {
             var expense = new Expense
@@ -34,14 +35,16 @@ namespace PharmaProjectAPI.Controllers
             return Ok("Expense added successfully");
         }
 
-        [HttpGet("all")]
+        [HttpGet()]
+        [Route("all")]
         public IActionResult GetAll()
         {
             var data = repo.GetAllExpenses();
             return Ok(data);
         }
 
-        [HttpGet("profit")]
+        [HttpGet]
+        [Route("profit")]
         public IActionResult GetProfit( decimal totalSales, decimal totalCostOfGoods)
         {
             var totalExpenses = repo.GetTotalExpenses();
