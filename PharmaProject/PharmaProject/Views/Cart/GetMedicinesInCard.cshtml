@@ -1,0 +1,31 @@
+﻿@model List<PharmaProject.Models.MedicineCardDTO>
+
+@{
+    ViewData["Title"] = "Available Medicines";
+}
+
+<h2 class="mb-3">Available Medicines</h2>
+
+<div class="container">
+    <div class="row">
+        @foreach (var med in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card shadow h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">@med.Name</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">@med.Category</h6>
+                        <p class="card-text">
+                            <strong>Manufacturer:</strong> @med.Manufacturer <br />
+                            <strong>Price:</strong> ₹@med.PricePerUnit <br />
+                            <strong>Batch No:</strong> @med.BatchNo <br />
+                            <strong>Expiry Date:</strong> @med.ExpiryDate.ToShortDateString()
+                        </p>
+                        <a href="#" class="btn btn-success btn-sm">Add to Cart</a>
+                        @* <a href="#" class="btn btn-primary btn-sm">Buy Now</a> *@
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

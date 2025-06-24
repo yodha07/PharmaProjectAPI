@@ -6,13 +6,13 @@ namespace PharmaProjectAPI.Models
     {
         public int CartId {  get; set; }
         public int UserId {  get; set; }
-
         public int MedicineId { get; set; } 
 
         public int Quantity {  get; set; }
 
         public decimal UnitPrice { get; set; }
         public DateTime AddedAt { get; set; }
+        public decimal ppu{get; set;}
 
         [ForeignKey("MedicineId")]
         public Medicine Medicine { get; set; }
@@ -21,6 +21,7 @@ namespace PharmaProjectAPI.Models
 
         [ForeignKey("UserId")]
         public User User { get; set; }
+
 
     }
 }

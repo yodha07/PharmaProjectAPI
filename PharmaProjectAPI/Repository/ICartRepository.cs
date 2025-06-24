@@ -8,5 +8,7 @@ namespace PharmaProjectAPI.Repository
         void AddToCart(Cart cart);
         List<CartDTO2> GetCartItems(int id);
         void DeleteCart(int id);
+
+        List<MedicineCardDTO> GetAllAvailableMedicineCards();
     }
 }

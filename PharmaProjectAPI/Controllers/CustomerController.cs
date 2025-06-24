@@ -64,20 +64,11 @@ namespace PharmaProjectAPI.Controllers
         }
         [HttpGet]
         [Route("FetchSales")]
-        public IActionResult sales()
+        public IActionResult FetchSales()
         {
-            var data=db.Sales.Include(x=>x.Customer).Include(x => x.SaleItems).ThenInclude(x=>x.Medicine).
-                SelectMany(x=> x.SaleItems.Select(y=> new PurchaseHistoryDTO()
-                {
-                    CustomerName=x.CustomerName,
-                    Mobile=x.Customer.Mobile,
-                    MedicineName=y.Medicine.Name,
-                    TotalAmount=x.TotalAmount,
-                    Discount=y.Discount,
-                    Quantity=y.Quantity
-
-                })).ToList();
+            var data = repo.GetSalesHistory();
             return Ok(data);
         }
+
     }
 }

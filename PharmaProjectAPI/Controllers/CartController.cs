@@ -44,5 +44,13 @@ namespace PharmaProjectAPI.Controllers
             var data = repo.GetCartItems(id);
             return Ok(data);
         }
+
+        [HttpGet("Medicines")]
+        public IActionResult GetAvailableMedicines()
+        {
+            var medicines = repo.GetAllAvailableMedicineCards();
+            return Ok(medicines);
+        }
+
     }
 }

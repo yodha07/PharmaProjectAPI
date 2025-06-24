@@ -21,10 +21,6 @@ namespace PharmaProjectAPI.Data
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
-
-        //public DbSet<Cart> Carts { get; set; }
-        //public DbSet<Transaction> Transactions { get; set; }
-
         public DbSet<Expense> Expenses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -72,19 +68,30 @@ namespace PharmaProjectAPI.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
 
+            modelBuilder.Entity<SaleItem>()
+                .HasOne(si => si.Customer)
+                .WithMany(c => c.SaleItems)
+                .HasForeignKey(si => si.CustomerId);
+
 
             //SaleItem-Customer
             modelBuilder.Entity<SaleItem>()
                 .HasOne(s => s.Customer)
+
+
+
                 .WithMany(m => m.SaleItems)
+                
                 .HasForeignKey(s => s.CustomerId)
                 .OnDelete(DeleteBehavior.Restrict);
+
 
             // SaleItem - Customer
             modelBuilder.Entity<SaleItem>()
                 .HasOne(s => s.Customer)
                 .WithMany(c => c.SaleItems)
                 .HasForeignKey(s => s.CustomerId)
+
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Sale - Customer
@@ -99,13 +106,14 @@ namespace PharmaProjectAPI.Data
                 .HasOne(t => t.Sale)
                 .WithMany(s => s.Transactions) // <== Add a List<Transaction> to Sale model
                 .HasForeignKey(t => t.SaleId)
-                .OnDelete(DeleteBehavior.Restrict); 
+                .OnDelete(DeleteBehavior.Restrict);
 
+         
             modelBuilder.Entity<Cart>()
-            .HasOne(c => c.Medicine)
-            .WithMany(m => m.Carts) 
-            .HasForeignKey(c => c.MedicineId)
-            .OnDelete(DeleteBehavior.Restrict);
+    .HasOne(c => c.Medicine)
+    .WithMany(m => m.Carts)
+    .HasForeignKey(c => c.MedicineId)
+    .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Cart>()
             .HasOne(c => c.User)

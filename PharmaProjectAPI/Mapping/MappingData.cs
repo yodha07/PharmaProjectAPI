@@ -49,6 +49,7 @@ namespace PharmaProjectAPI.Mapping
             .ForMember(dest => dest.mname, opt => opt.MapFrom(src => src.Medicine != null ? src.Medicine.Name : ""));
 
             CreateMap<User, UpdateProfileDTO>().ReverseMap();
+            CreateMap<ExpenseDTO, Expense>().ReverseMap();
 
         }
     }

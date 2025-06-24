@@ -45,6 +45,9 @@ namespace PharmaProjectAPI.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("ppu")
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("CartId");
 
                     b.HasIndex("MedicineId");
