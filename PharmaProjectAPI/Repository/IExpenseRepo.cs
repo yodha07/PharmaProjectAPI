@@ -1,11 +1,12 @@
-﻿using PharmaProjectAPI.Models;
+﻿using PharmaProjectAPI.DTO;
+using PharmaProjectAPI.Models;
 
 namespace PharmaProjectAPI.Repository
 {
     public interface IExpenseRepo
     {
         List<Expense> GetAllExpenses();
-        Expense AddExpense(Expense expense);
+        void AddExpense(Expense expense);
         decimal GetTotalExpenses();
     }
 }

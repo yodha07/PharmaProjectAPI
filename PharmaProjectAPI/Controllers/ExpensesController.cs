@@ -28,9 +28,10 @@ namespace PharmaProjectAPI.Controllers
                 Amount = dto.Amount,
                 Date = dto.Date,
                 CreatedAt = DateTime.Now,
-                CreatedBy = "Admin"
+                CreatedBy = "Admin",
+                ModifiedAt = DateTime.Now,
+                ModifiedBy = "Admin"
             };
-
             repo.AddExpense(expense);
             return Ok("Expense added successfully");
         }

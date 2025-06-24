@@ -1,4 +1,5 @@
 ﻿using PharmaProjectAPI.Data;
+using PharmaProjectAPI.DTO;
 using PharmaProjectAPI.Models;
 using PharmaProjectAPI.Repository;
 
@@ -18,11 +19,10 @@ namespace PharmaProjectAPI.Services
             return db.Expenses.ToList();
         }
 
-        public Expense AddExpense(Expense expense)
+        public void AddExpense(Expense expense)
         {
             db.Expenses.Add(expense);
             db.SaveChanges();
-            return expense;
         }
 
         public decimal GetTotalExpenses()
