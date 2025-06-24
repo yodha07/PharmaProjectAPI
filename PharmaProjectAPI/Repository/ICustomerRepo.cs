@@ -11,5 +11,7 @@ namespace PharmaProjectAPI.Repository
         void Delete(List<int> ids);
         List<Customer> GetAll();
         CustomerDTO3 GetCustomerById(int id);
+        List<PurchaseHistoryDTO> GetSalesHistory();
+
     }
 }

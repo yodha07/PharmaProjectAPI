@@ -104,6 +104,27 @@ namespace PharmaProjectAPI.Services
         {
             return db.Customers.Include(x=>x.Sales).ToList();
         }
+
+        public List<PurchaseHistoryDTO> GetSalesHistory()
+        {
+            var data = db.Sales
+                .Include(x => x.Customer)
+                .Include(x => x.SaleItems)
+                .ThenInclude(y => y.Medicine)
+                .SelectMany(x => x.SaleItems.Select(y => new PurchaseHistoryDTO
+                {
+                    CustomerName = x.CustomerName,
+                    Mobile = x.Customer.Mobile,
+                    MedicineName = y.Medicine.Name,
+                    TotalAmount = x.TotalAmount,
+                    Discount = y.Discount,
+                    Quantity = y.Quantity
+                }))
+                .ToList();
+
+            return data;
+        }
+
     }
 }
     
