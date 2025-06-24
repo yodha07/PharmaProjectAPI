@@ -29,14 +29,26 @@ namespace PharmaProjectAPI.Services
 
         public List<CartDTO2> GetCartItems(int id)
         {
-            return db.Carts.Include(c => c.Medicine).Include(x => x.User).Where(c => c.UserId == id).
-                Select(c => new CartDTO2()
+            return db.Carts
+                .Include(c => c.Medicine)
+                .Include(c => c.User)
+                .Where(c => c.UserId == id)
+                .Select(c => new CartDTO2()
                 {
                     CartId = c.CartId,
                     userName = c.User.Username,
-                    medicineName=c.Medicine.Name,
-                    Quantity= c.Quantity,
-                }).ToList();
+                    medicineName = c.Medicine.Name,
+                    Quantity = c.Quantity,
+
+                    // ✅ Get latest CostPrice from PurchaseItems for the same medicine
+                    Price = db.PurchaseItems
+                             .Where(p => p.MedicineId == c.MedicineId)
+                             .OrderByDescending(p => p.CreatedAt)
+                             .Select(p => p.CostPrice)
+                             .FirstOrDefault()
+                })
+                .ToList();
         }
+
     }
 }

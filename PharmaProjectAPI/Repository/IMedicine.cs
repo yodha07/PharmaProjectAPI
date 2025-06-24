@@ -12,5 +12,6 @@ namespace PharmaProjectAPI.Repository
         void Edit(MedicineEdit edit);
         List<Medicine> fetch();
         List<MedicineStockDto> GetMedicineStock();
+        List<MedicineCartDTO> GetMedicinesForCart();
     }
 }

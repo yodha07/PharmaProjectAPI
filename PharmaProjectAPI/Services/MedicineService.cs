@@ -143,6 +143,25 @@ namespace PharmaProjectAPI.Services
             return stockData;
         }
 
+        public List<MedicineCartDTO> GetMedicinesForCart()
+        {
+            return db.Medicines
+                .Select(m => new MedicineCartDTO
+                {
+                    MedicineId = m.MedicineId,
+                    Name = m.Name,
+                    Category = m.Category,
+
+                    // ✅ Get latest cost price from PurchaseItems table
+                    Price = db.PurchaseItems
+                        .Where(p => p.MedicineId == m.MedicineId)
+                        .OrderByDescending(p => p.CreatedAt)
+                        .Select(p => p.CostPrice)
+                        .FirstOrDefault()
+                })
+                .ToList();
+        }
+
 
 
     }

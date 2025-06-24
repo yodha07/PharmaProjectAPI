@@ -10,10 +10,13 @@ namespace PharmaProjectAPI.Models
         public int MedicineId { get; set; } 
 
         public int Quantity {  get; set; }
+
+        public decimal UnitPrice { get; set; }
         public DateTime AddedAt { get; set; }
 
         [ForeignKey("MedicineId")]
         public Medicine Medicine { get; set; }
+
 
 
         [ForeignKey("UserId")]

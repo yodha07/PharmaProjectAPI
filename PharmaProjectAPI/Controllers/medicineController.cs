@@ -15,6 +15,7 @@ namespace PharmaProjectAPI.Controllers
         {
             this.med = med;
         }
+
         [HttpPost]
         [Route("Add")]
         public IActionResult AddMedicine(MedicineDTO m)
@@ -22,6 +23,7 @@ namespace PharmaProjectAPI.Controllers
             med.AddMedi(m);
             return Ok("Added Successfull!!!");
         }
+
         [HttpGet]
         [Route("fetch")]
         public IActionResult Fetch()
@@ -29,6 +31,7 @@ namespace PharmaProjectAPI.Controllers
             var t=med.fetch();
             return Ok(t);
         }
+
         [HttpDelete]
         [Route("Delete/{id}")]
         public IActionResult Delete(int id)
@@ -65,5 +68,13 @@ namespace PharmaProjectAPI.Controllers
             var stockList = med.GetMedicineStock();
             return Ok(stockList);
         }
+        [HttpGet]
+        [Route("cart")]
+        public IActionResult GetCartMedicines()
+        {
+            var data = med.GetMedicinesForCart();
+            return Ok(data);
+        }
+
     }
 }

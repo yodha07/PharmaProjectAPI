@@ -5,7 +5,8 @@
         public int CartId { get; set; }
         public string userName { get; set; }
         public string medicineName { get; set; }
-        public int Quantity {  get; set; }
+        public int Quantity { get; set; }
 
+        public decimal Price {get;set;}
     }
 }

@@ -1,0 +1,53 @@
+﻿@model List<MedicineCartDTO>
+
+<h2 style="text-align:center;">Medicine Cart</h2>
+
+<form method="post" asp-action="SubmitCart">
+    <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:20px; padding:20px;">
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <div style="
+                width: 250px;
+                border: 1px solid #ccc;
+                border-radius: 10px;
+                padding: 20px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+                background-color: #fff;
+                text-align:center;
+                "
+                 onmouseover="this.style.transform='scale(1.03)'; this.style.boxShadow='0 4px 10px rgba(0,0,0,0.2)'"
+                 onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 2px 5px rgba(0,0,0,0.1)'">
+
+                <h3>@Model[i].Name</h3>
+                <p><strong>Category:</strong> @Model[i].Category</p>
+                <p><strong>Price:</strong> ₹@Model[i].PricePerUnit.ToString("0.00")</p>
+
+                <div style="margin-top:10px;">
+                    <label>Quantity</label><br />
+                    <input asp-for="@Model[i].Quantity" type="number" min="0" style="width: 80px;" />
+                </div>
+
+                <!-- Hidden Fields for Post -->
+                <input type="hidden" asp-for="@Model[i].MedicineId" />
+                <input type="hidden" asp-for="@Model[i].Name" />
+                <input type="hidden" asp-for="@Model[i].Category" />
+                <input type="hidden" asp-for="@Model[i].PricePerUnit" />
+            </div>
+        }
+    </div>
+
+    <div style="text-align:center; margin-top:20px;">
+        <button type="submit" style="
+            padding: 10px 30px;
+            font-size: 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        ">
+            Add to Cart
+        </button>
+    </div>
+</form>
