@@ -1,4 +1,4 @@
-﻿namespace PharmaProjectAPI.DTO
+﻿namespace PharmaProject.Models
 {
     public class ExpenseDTO
     {
